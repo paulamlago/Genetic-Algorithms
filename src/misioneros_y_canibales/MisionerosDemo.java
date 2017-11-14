@@ -13,7 +13,10 @@ public class MisionerosDemo {
 		noInf.MisionerosBFSDemo();
 		noInf.MisionerosUCSDemo();*/
 		
-		inf.MisionerosASDemo();
+		inf.MisionerosASDesplazadosDemo();
+		inf.MisionerosASCNCMDemo();
+		inf.MisionerosVorazDesplazadosDemo();
+		inf.MisionerosVorazCNCMDemo();
 	}
 	
 }

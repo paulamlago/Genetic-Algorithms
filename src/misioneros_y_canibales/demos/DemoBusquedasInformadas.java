@@ -12,10 +12,13 @@ import aima.core.search.framework.QueueSearch;
 import aima.core.search.framework.Search;
 import aima.core.search.framework.SearchAgent;
 import aima.core.search.informed.AStarSearch;
+import aima.core.search.informed.GreedyBestFirstSearch;
 import misioneros_y_canibales.EstadoMisioneros;
 import misioneros_y_canibales.MisionerosFunctionFactory;
 import misioneros_y_canibales.MisionerosGoalTest;
-import misioneros_y_canibales.heuristicas.DesplazadosHeuristic;
+import misioneros_y_canibales.heurísticas.CanibalesNoComenMisionerosHeuristic;
+import misioneros_y_canibales.heurísticas.DesplazadosHeuristic;
+
 public class DemoBusquedasInformadas {
 
 	static EstadoMisioneros estadoInicial = new EstadoMisioneros();
@@ -24,25 +27,100 @@ public class DemoBusquedasInformadas {
 		// TODO Auto-generated constructor stub
 	}
 
-	public void MisionerosASDemo(){
-		System.out.println("\nMisionerosA*SDemo-->");
+	public void MisionerosASDesplazadosDemo(){
+		System.out.println("\nMisionerosA* DesplazadosHeuristic Demo-->");
 		try{
-		// Crear un objeto Problem con la representaciï¿½n de estados y operadores
+		// Crear un objeto Problem con la representación de estados y operadores
 		Problem problem = new Problem(estadoInicial,
 		MisionerosFunctionFactory.getActionsFunction(), MisionerosFunctionFactory.getResultFunction(),
-		new MisionerosGoalTest()); // si no hay funciï¿½n de coste en el constructor se usa el coste por defecto
-		// si hay funciï¿½n de coste hay que aï¿½adir el objeto correspondiente: new MisionerosStepCostFunction()
-		// indicar el tipo de bï¿½squeda
+		new MisionerosGoalTest()); // si no hay función de coste en el constructor se usa el coste por defecto
+		// si hay función de coste hay que añadir el objeto correspondiente: new MisionerosStepCostFunction()
+		// indicar el tipo de búsqueda
 		QueueSearch gs = new GraphSearch();
 		HeuristicFunction hf = new DesplazadosHeuristic();
 		
-		Search search = new AStarSearch(gs, hf); // bï¿½squeda en anchura
-		// crear un agente que realice la bï¿½squeda sobre el problema
+		Search search = new AStarSearch(gs, hf); // búsqueda en anchura
+		// crear un agente que realice la búsqueda sobre el problema
 		SearchAgent agent = new SearchAgent(problem, search);
-		// escribir la soluciï¿½n encontrada (operadores aplicados) e informaciï¿½n sobre los recursos utilizados
+		// escribir la solución encontrada (operadores aplicados) e información sobre los recursos utilizados
 		printActions(agent.getActions());
 		printInstrumentation(agent.getInstrumentation());
-		// Hay que implementar estos mï¿½todos en la clase Demo (copiar de aima.gui.demo.search.EightPuzzleDemo)
+		// Hay que implementar estos métodos en la clase Demo (copiar de aima.gui.demo.search.EightPuzzleDemo)
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
+	}
+		
+	public void MisionerosASCNCMDemo(){
+		System.out.println("\nMisionerosA* DesplazadosHeuristic Demo-->");
+		try{
+		// Crear un objeto Problem con la representación de estados y operadores
+		Problem problem = new Problem(estadoInicial,
+		MisionerosFunctionFactory.getActionsFunction(), MisionerosFunctionFactory.getResultFunction(),
+		new MisionerosGoalTest()); // si no hay función de coste en el constructor se usa el coste por defecto
+		// si hay función de coste hay que añadir el objeto correspondiente: new MisionerosStepCostFunction()
+		// indicar el tipo de búsqueda
+		QueueSearch gs = new GraphSearch();
+		HeuristicFunction hf = new CanibalesNoComenMisionerosHeuristic();
+		
+		Search search = new AStarSearch(gs, hf); // búsqueda en anchura
+		// crear un agente que realice la búsqueda sobre el problema
+		SearchAgent agent = new SearchAgent(problem, search);
+		// escribir la solución encontrada (operadores aplicados) e información sobre los recursos utilizados
+		printActions(agent.getActions());
+		printInstrumentation(agent.getInstrumentation());
+		// Hay que implementar estos métodos en la clase Demo (copiar de aima.gui.demo.search.EightPuzzleDemo)
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	public void MisionerosVorazDesplazadosDemo(){
+		System.out.println("\nMisioneros Voraz DesplazadosHeuristic Demo-->");
+		try{
+		// Crear un objeto Problem con la representación de estados y operadores
+		Problem problem = new Problem(estadoInicial,
+		MisionerosFunctionFactory.getActionsFunction(), MisionerosFunctionFactory.getResultFunction(),
+		new MisionerosGoalTest()); // si no hay función de coste en el constructor se usa el coste por defecto
+		// si hay función de coste hay que añadir el objeto correspondiente: new MisionerosStepCostFunction()
+		// indicar el tipo de búsqueda
+		QueueSearch gs = new GraphSearch();
+		HeuristicFunction hf = new DesplazadosHeuristic();
+		
+		Search search = new GreedyBestFirstSearch(gs, hf); // búsqueda en anchura
+		// crear un agente que realice la búsqueda sobre el problema
+		SearchAgent agent = new SearchAgent(problem, search);
+		// escribir la solución encontrada (operadores aplicados) e información sobre los recursos utilizados
+		printActions(agent.getActions());
+		printInstrumentation(agent.getInstrumentation());
+		// Hay que implementar estos métodos en la clase Demo (copiar de aima.gui.demo.search.EightPuzzleDemo)
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	public void MisionerosVorazCNCMDemo(){
+		System.out.println("\nMisioneros Voraz CNCM Heuristic Demo-->");
+		try{
+		// Crear un objeto Problem con la representación de estados y operadores
+		Problem problem = new Problem(estadoInicial,
+		MisionerosFunctionFactory.getActionsFunction(), MisionerosFunctionFactory.getResultFunction(),
+		new MisionerosGoalTest()); // si no hay función de coste en el constructor se usa el coste por defecto
+		// si hay función de coste hay que añadir el objeto correspondiente: new MisionerosStepCostFunction()
+		// indicar el tipo de búsqueda
+		QueueSearch gs = new GraphSearch();
+		HeuristicFunction hf = new CanibalesNoComenMisionerosHeuristic();
+		
+		Search search = new GreedyBestFirstSearch(gs, hf); // búsqueda en anchura
+		// crear un agente que realice la búsqueda sobre el problema
+		SearchAgent agent = new SearchAgent(problem, search);
+		// escribir la solución encontrada (operadores aplicados) e información sobre los recursos utilizados
+		printActions(agent.getActions());
+		printInstrumentation(agent.getInstrumentation());
+		// Hay que implementar estos métodos en la clase Demo (copiar de aima.gui.demo.search.EightPuzzleDemo)
 		}
 		catch (Exception e){
 			e.printStackTrace();
