@@ -1,5 +1,5 @@
 
-package misioneros_y_canibales.heurísticas;
+package misioneros_y_canibales.heurÃ­sticas;
 
 import aima.core.search.framework.HeuristicFunction;
 import misioneros_y_canibales.EstadoMisioneros;

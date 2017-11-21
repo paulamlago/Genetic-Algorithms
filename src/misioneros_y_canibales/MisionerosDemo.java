@@ -10,9 +10,9 @@ public class MisionerosDemo {
 		DemoBusquedasNoInformadas noInf = new DemoBusquedasNoInformadas();
 		DemoBusquedasInformadas inf = new DemoBusquedasInformadas();
 		
-		/**noInf.MisionerosDFSDemo();
-		noInf.MisionerosBFSDemo();
-		noInf.MisionerosUCSDemo();*/
+//		noInf.MisionerosDFSDemo();
+//		noInf.MisionerosBFSDemo();
+//		noInf.MisionerosUCSDemo();
 		
 		inf.MisionerosASDesplazadosDemo();
 		inf.MisionerosASCNCMDemo();
