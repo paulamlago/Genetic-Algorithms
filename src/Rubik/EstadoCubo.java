@@ -105,6 +105,7 @@ public class EstadoCubo {
 		}
 	}
 
+	
 	public EstadoCubo(EstadoCubo estado) {
 		this.cubo = estado.cubo;
 	}
@@ -287,6 +288,61 @@ public class EstadoCubo {
 		return (120 * value1)/13 + (10* value2) + ( value3? 1 : 0);
 		
 		}
+
+	public boolean movimientoValido(Action where) {
+		
+		if(where.equals(U)) {
+			EstadoCubo estadoNuevo = new EstadoCubo(this);
+			estadoNuevo.moveU();
+		}
+		if(where.equals(F)) {
+			EstadoCubo estadoNuevo = new EstadoCubo(this);
+			estadoNuevo.moveF();
+		}
+		if(where.equals(D)) {
+			EstadoCubo estadoNuevo = new EstadoCubo(this);
+			estadoNuevo.moveD();
+		}
+		if(where.equals(L)) {
+			EstadoCubo estadoNuevo = new EstadoCubo(this);
+			estadoNuevo.moveL();
+		}
+		if(where.equals(R)) {
+			EstadoCubo estadoNuevo = new EstadoCubo(this);
+			estadoNuevo.moveR();
+		}
+		if(where.equals(B)) {
+			EstadoCubo estadoNuevo = new EstadoCubo(this);
+			estadoNuevo.moveB();
+		}
+		
+		if(where.equals(U_)) {
+			EstadoCubo estadoNuevo = new EstadoCubo(this);
+			estadoNuevo.moveU_();
+		}
+		if(where.equals(F_)) {
+			EstadoCubo estadoNuevo = new EstadoCubo(this);
+			estadoNuevo.moveF_();
+		}
+		if(where.equals(D_)) {
+			EstadoCubo estadoNuevo = new EstadoCubo(this);
+			estadoNuevo.moveD_();
+		}
+		if(where.equals(L_)) {
+			EstadoCubo estadoNuevo = new EstadoCubo(this);
+			estadoNuevo.moveL_();
+		}
+		if(where.equals(R_)) {
+			EstadoCubo estadoNuevo = new EstadoCubo(this);
+			estadoNuevo.moveR_();
+		}
+		if(where.equals(B_)) {
+			EstadoCubo estadoNuevo = new EstadoCubo(this);
+			estadoNuevo.moveB_();
+		}
+		
+		return true;
+	}
 	
 	
 	

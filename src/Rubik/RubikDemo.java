@@ -10,10 +10,13 @@ import java.util.Set;
 
 import aima.core.agent.Action;
 import aima.core.agent.impl.DynamicAction;
+import aima.core.search.framework.GraphSearch;
 import aima.core.search.framework.Problem;
+import aima.core.search.framework.QueueSearch;
 import aima.core.search.framework.Search;
 import aima.core.search.framework.SearchAgent;
 import aima.core.search.uninformed.BreadthFirstSearch;
+import aima.core.search.uninformed.DepthFirstSearch;
 
 public class RubikDemo {
 	static EstadoCubo estadoInicial;
@@ -41,13 +44,14 @@ public class RubikDemo {
 		try {
 			// Crear un objeto Problem con la representación de estados y operadores
 
-			Problem problem = new Problem(estadoInicial, RubikFunctionFactory.getActionsFunction(),
-					RubikFunctionFactory.getResultFunction(), new RubikGoalTest());
+
+				Problem problem = new Problem(estadoInicial, RubikFunctionFactory.getActionsFunction(),	RubikFunctionFactory.getResultFunction(), new RubikGoalTest());
 
 			new RubikStepCostFunction();
 			
 			// indicar el tipo de búsqueda
-			Search search = new BreadthFirstSearch();
+			QueueSearch gs = new GraphSearch();
+			Search search = new DepthFirstSearch(gs);
 			
 			// crear un agente que realice la búsqueda sobre el problema
 			SearchAgent agent = new SearchAgent(problem, search);
