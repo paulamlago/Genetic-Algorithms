@@ -284,7 +284,7 @@ public class EstadoCubo {
 		
 		value2 = (this.cubo[3][0][0] == this.cubo[3][0][1]) ? (this.cubo[3][2][0] == this.cubo[3][1][1]) ? 15 : 5 : 0;
 		
-		return (100 * value1) + (10* value2) + ( value3? 1 : 0);
+		return (120 * value1)/13 + (10* value2) + ( value3? 1 : 0);
 		
 		}
 	
