@@ -9,9 +9,11 @@ public class Horario {
 
 	private Integer[][] horario;
 	private int size;
+	private int turnosYaAsignados;
 	
 	public Horario(int size) {
 		this.size = size;
+		this.setTurnosYaAsignados(0);
 		horario = new Integer[size][size];
 		for(int i = 0; i < size; i++){ //Lunes  Martes Miercoles Jueves
 			for (int j = 0; j < size; j++){
@@ -23,6 +25,7 @@ public class Horario {
 	public void addProfesorAt(XYLocation l, int p){
 		if (!ProfesorExistsAt(l)){
 			horario[l.getXCoOrdinate()][l.getYCoOrdinate()] = p;
+			this.setTurnosYaAsignados(this.getTurnosYaAsignados() + 1);
 		}
 	}
 
@@ -46,5 +49,13 @@ public class Horario {
 			}
 		}
 		return result;
+	}
+
+	public int getTurnosYaAsignados() {
+		return turnosYaAsignados;
+	}
+
+	public void setTurnosYaAsignados(int turnosYaAsignados) {
+		this.turnosYaAsignados = turnosYaAsignados;
 	}
 }

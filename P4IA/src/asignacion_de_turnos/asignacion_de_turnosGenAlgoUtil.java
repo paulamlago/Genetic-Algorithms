@@ -78,9 +78,10 @@ public class asignacion_de_turnosGenAlgoUtil{
 	public static class asignacion_de_turnosGoalTest implements GoalTest{
 
 		@Override
-		public boolean isGoalState(Object arg0) {
-			
-			return false;
+		public boolean isGoalState(Object state) {
+			asignacion_de_turnosState e = (asignacion_de_turnosState) state;
+			//si el horario tiene asignados el número de turnos necesarios -> Estado objetivo
+			return e.getNumTurnos() == e.getHorario().getTurnosYaAsignados() ? true : false;
 		}
 
 	}
