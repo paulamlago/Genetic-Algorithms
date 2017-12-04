@@ -51,6 +51,18 @@ public class NQueensGenAlgoUtil {
 		return fab;
 	}
 	
+	public static NQueensBoard getBoardForIndividual(Individual<Integer> individual) {
+		int boardSize = individual.length();
+		NQueensBoard board = new NQueensBoard(boardSize);
+		
+		for (int i = 0; i < boardSize; i++) {
+			int pos = individual.getRepresentation().get(i);
+			board.addQueenAt(new XYLocation(i, pos));
+		}
+
+		return board;
+	}
+	
 	public static class NQueensFitnessFunction implements FitnessFunction<Integer> {
 
 		public double apply(Individual<Integer> individual) {
@@ -106,14 +118,4 @@ public class NQueensGenAlgoUtil {
 		}
 	}
 
-	public static NQueensBoard getBoardForIndividual(Individual<Integer> individual) {
-		int boardSize = individual.length();
-		NQueensBoard board = new NQueensBoard(boardSize);
-		for (int i = 0; i < boardSize; i++) {
-			int pos = individual.getRepresentation().get(i);
-			board.addQueenAt(new XYLocation(i, pos));
-		}
-
-		return board;
-	}
 }
