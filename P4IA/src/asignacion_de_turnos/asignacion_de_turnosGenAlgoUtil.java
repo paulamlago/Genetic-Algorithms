@@ -106,12 +106,6 @@ public class asignacion_de_turnosGenAlgoUtil{
 			return fitness;
 		}
 
-		@Override
-		public double getValue(Individual<Profesor> arg0) {
-			// TODO Auto-generated method stub
-			return 0;
-		}
-
 	}
 
 	public static class asignacion_de_turnosGoalTest implements GoalTest{

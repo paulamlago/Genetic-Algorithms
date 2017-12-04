@@ -11,7 +11,7 @@ public class Profesor{
 	public String nombre;
 	private List<Integer> restricciones;
 	private List<Integer> preferencias;
-	private List<XYLocation> locatedAt;
+	private static List<XYLocation> locatedAt;
 	
 	public Profesor(String n){
 		this.nombre = n;
