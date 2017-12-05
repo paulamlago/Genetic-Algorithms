@@ -114,7 +114,6 @@ public class Horario {
 	public void setTurnosYaAsignados(int turnosYaAsignados) {
 		this.turnosYaAsignados = turnosYaAsignados;
 	}
-
 	
 	public void setGoal(int g){
 		this.goal = g;

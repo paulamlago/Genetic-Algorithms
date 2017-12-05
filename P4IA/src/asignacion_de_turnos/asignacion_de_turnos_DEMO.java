@@ -103,8 +103,10 @@ public class asignacion_de_turnos_DEMO {
 			GoalTest goalTest = asignacion_de_turnosGenAlgoUtil.getGoalTest(turnosNecesarios, profesores.size());
 			// Generate an initial population
 			Set<Individual<Profesor>> population = new HashSet<Individual<Profesor>>();
+			
 			for (int i = 0; i < 50; i++) {
-				population.add(asignacion_de_turnosGenAlgoUtil.generateRandomIndividual(boardSize, profesores));
+				Individual<Profesor> p = asignacion_de_turnosGenAlgoUtil.generateRandomIndividual(boardSize, profesores);
+				population.add(p);
 			}
 
 			GeneticAlgorithm<Profesor> ga = new GeneticAlgorithm<Profesor>(boardSize,
