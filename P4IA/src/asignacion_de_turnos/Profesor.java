@@ -11,13 +11,13 @@ public class Profesor{
 	public String nombre;
 	private List<Integer> restricciones;
 	private List<Integer> preferencias;
-	private static List<XYLocation> locatedAt;
+	private List<Integer> locatedAt;
 	
 	public Profesor(String n){
 		this.nombre = n;
 		restricciones = new ArrayList<Integer>();
 		preferencias = new ArrayList<Integer>();
-		locatedAt = new ArrayList<XYLocation>();
+		locatedAt = new ArrayList<Integer>();
 	}
 	
 	
@@ -38,16 +38,16 @@ public class Profesor{
 	}
 
 
-	public List<XYLocation> getLocatedAt() {
+	public List<Integer> getLocatedAt() {
 		return locatedAt;
 	}
 
 
-	public void addLocatedAt(XYLocation loc) {
+	public void addLocatedAt(Integer loc) {
 		locatedAt.add(loc);
 	}
-	public void removeLocatedAt(XYLocation loc){
-		Iterator<XYLocation> it = locatedAt.iterator();
+	public void removeLocatedAt(Integer loc){
+		Iterator<Integer> it = locatedAt.iterator();
 		while (it.hasNext()){
 			if (it.next() == loc){
 				it.remove();

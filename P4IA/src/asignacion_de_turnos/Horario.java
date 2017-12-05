@@ -39,7 +39,7 @@ public class Horario {
 			int i = loc.getXCoOrdinate();
 			int j = loc.getYCoOrdinate();
 			if(!p.getRestricciones().contains(turnos[i][j])){
-				p.addLocatedAt(loc);
+				p.addLocatedAt(turnos[i][j]);
 				horario[i][j] = p;
 				this.setTurnosYaAsignados(this.getTurnosYaAsignados() + 1);
 			}
@@ -50,7 +50,7 @@ public class Horario {
 		if (ProfesorExistsAt(loc)){
 			int i = loc.getXCoOrdinate();
 			int j = loc.getYCoOrdinate();
-			horario[i][j].removeLocatedAt(loc);
+			horario[i][j].removeLocatedAt(turnos[i][j]);
 			horario[i][j] = new Profesor(""); //dejamos un profesor vacío
 		}
 	}
@@ -92,7 +92,21 @@ public class Horario {
 		int y = loc.getYCoOrdinate();
 		return turnos[x][y];
 	}
+	
+	public XYLocation getCoordinate(int loc){
 
+		XYLocation sol = null;
+		for (int i = 0; i < size; i++){
+			for (int j = 0; j < size; j++){
+				if (turnos[i][j] == loc){
+					sol = new XYLocation(i, j);
+				}
+			}
+		}
+		
+		return sol;
+	}
+	
 	public int getGoal() {
 		return goal;
 	}

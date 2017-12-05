@@ -117,7 +117,7 @@ public class asignacion_de_turnos_DEMO {
 					+ asignacion_de_turnosGenAlgoUtil.getBoardForIndividual(bestIndividual));
 			System.out.println("Board Size      = " + boardSize);
 			System.out.println("# Board Layouts = " + (new BigDecimal(boardSize).pow(boardSize)));
-			System.out.println("Fitness         = " + fitnessFunction.apply(bestIndividual));
+			System.out.println("Fitness         = " + fitnessFunction.getValue(bestIndividual));
 			System.out.println("Is Goal         = " + goalTest.isGoalState(bestIndividual));
 			System.out.println("Population Size = " + ga.getPopulationSize());
 			System.out.println("Itertions       = " + ga.getIterations());
@@ -131,7 +131,7 @@ public class asignacion_de_turnos_DEMO {
 					.println("Goal Test Best Individual=\n" + asignacion_de_turnosGenAlgoUtil.getBoardForIndividual(bestIndividual));
 			System.out.println("Board Size      = " + boardSize);
 			System.out.println("# Board Layouts = " + (new BigDecimal(boardSize).pow(boardSize)));
-			System.out.println("Fitness         = " + fitnessFunction.apply(bestIndividual));
+			System.out.println("Fitness         = " + fitnessFunction.getValue(bestIndividual));
 			System.out.println("Is Goal         = " + goalTest.isGoalState(bestIndividual));
 			System.out.println("Population Size = " + ga.getPopulationSize());
 			System.out.println("Itertions       = " + ga.getIterations());

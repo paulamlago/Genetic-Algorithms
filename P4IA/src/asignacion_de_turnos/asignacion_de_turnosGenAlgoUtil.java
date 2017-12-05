@@ -34,9 +34,11 @@ public class asignacion_de_turnosGenAlgoUtil{
 	
 	public static Individual<Profesor> generateRandomIndividual(int boardSize, List<Profesor> p) {
 		List<Profesor> individualRepresentation = new ArrayList<Profesor>();
+		
 		for (int i = 0; i < boardSize; i++) {
 			Profesor profe = p.get(new Random().nextInt(p.size()));
 			if (!profe.getRestricciones().contains(i + 1)){
+				profe.addLocatedAt(i);
 				individualRepresentation.add(profe);
 			}
 			else individualRepresentation.add(new Profesor(""));
@@ -63,9 +65,11 @@ public class asignacion_de_turnosGenAlgoUtil{
 		
 		for (int i = 0; i < boardSize; i++) {
 				Profesor p = individual.getRepresentation().get(i);
-				List<XYLocation> l = p.getLocatedAt();
-				for (int j = 0; j < l.size(); j++){
-					board.addProfesorAt(l.get(j), p);
+				if (p.nombre != ""){
+					List<Integer> l = p.getLocatedAt();
+					for (int j = 0; j < l.size(); j++){
+						board.addProfesorAt(board.getCoordinate(l.get(j)), p);
+					}
 				}
 		}
 
@@ -73,7 +77,7 @@ public class asignacion_de_turnosGenAlgoUtil{
 	}
 	
 	public static class asignacion_de_turnosFitnessFunction implements FitnessFunction<Profesor>{
-
+		
 		public double apply(Individual<Profesor> individual) {
 			
 			double fitness = 0.0;
@@ -104,6 +108,12 @@ public class asignacion_de_turnosGenAlgoUtil{
 			}
 			
 			return fitness;
+		}
+
+		@Override
+		public double getValue(Individual<Profesor> arg0) {
+			
+			return apply(arg0);
 		}
 
 	}
