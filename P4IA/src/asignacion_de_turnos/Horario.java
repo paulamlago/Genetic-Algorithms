@@ -119,4 +119,33 @@ public class Horario {
 	public void setGoal(int g){
 		this.goal = g;
 	}
+	
+	public String toString(){
+		String s = "--- HORARIO --- \n";
+			
+		s += "\t" + "Lunes" + "\t" + "Martes" + "\t" + "Miercoles" + "\t" + "Jueves" + "\t" + "Viernes";
+		
+		for (int i = 0; i < size; i++){
+			switch(i){
+			case 0:
+				s += "\n 10:30" + "\t";
+				break;
+			case 1:
+				s += "\n 12:00" + "\t";
+				break;
+			case 2:
+				s += "\n 15:00" + "\t";
+				break;
+			default:
+				s += "\n 16:30"+ "\t";
+			}
+			
+			for (int j = 0; j < size; j++){
+				s+= horario[i][j].nombre + "\t";
+			}
+		}
+		
+		
+		return s + "\n";
+	}
 }

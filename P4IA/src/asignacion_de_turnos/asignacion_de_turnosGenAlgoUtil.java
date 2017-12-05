@@ -69,12 +69,7 @@ public class asignacion_de_turnosGenAlgoUtil{
 					List<Integer> l = p.getLocatedAt();
 					if (l.size() > 0){
 						for (int j = 0; j < l.size(); j++){
-							try{
-								
 							board.addProfesorAt(board.getCoordinate(l.get(j)), p);
-							}catch(Exception e){
-								System.out.println("ups");
-							}
 						}
 					}
 				}
@@ -111,7 +106,7 @@ public class asignacion_de_turnosGenAlgoUtil{
 				//necesito el número de turnos necesarios (objetivo) y el número de profesores
 				
 				if (!yaEstudiados.contains(p) && p.getLocatedAt().size() > Math.ceil(goal / numeroDeProfesores)){
-					fitness -= 2.0; //por ejemplo
+					fitness -= 1.0; //por ejemplo
 				}
 				
 				yaEstudiados.add(p);
