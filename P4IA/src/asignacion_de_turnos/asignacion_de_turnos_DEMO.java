@@ -123,6 +123,22 @@ public class asignacion_de_turnos_DEMO {
 			System.out.println("Itertions       = " + ga.getIterations());
 			System.out.println("Took            = " + ga.getTimeInMilliseconds() + "ms.");
 
+			//print the individual
+			List<Profesor> horario = bestIndividual.getRepresentation();
+			
+			System.out.println("El horario es: ");
+			
+			for (int i = 0; i < horario.size(); i++){
+				System.out.println("Turnos asignados a " + horario.get(i).nombre + ": ");
+				List<Integer> loc = horario.get(i).getLocatedAt();
+				for (int j = 0; j < loc.size(); j++){
+					System.out.println(loc.get(j) + " ");
+				}
+				System.out.println("\n");
+			}
+			
+			
+			
 			// Run till goal is achieved
 			bestIndividual = ga.geneticAlgorithm(population, fitnessFunction, goalTest, 0L);
 

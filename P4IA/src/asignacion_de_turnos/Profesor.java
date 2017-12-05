@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import aima.core.util.datastructure.XYLocation;
-
 public class Profesor{
 
 	public String nombre;
@@ -44,7 +42,9 @@ public class Profesor{
 
 
 	public void addLocatedAt(Integer loc) {
-		locatedAt.add(loc);
+		if (!locatedAt.contains(loc)){
+			locatedAt.add(loc);
+		}
 	}
 	public void removeLocatedAt(Integer loc){
 		Iterator<Integer> it = locatedAt.iterator();

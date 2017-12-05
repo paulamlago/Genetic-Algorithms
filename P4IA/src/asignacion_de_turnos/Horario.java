@@ -20,15 +20,15 @@ public class Horario {
 		horario = new Profesor[size][size];
 		turnos = new int[size][size];
 		
-		int t = 1;
+		int t;
 		
 		for(int i = 0; i < size; i++){ //Lunes  Martes Miercoles Jueves
+			t = i + 1;
 			for (int j = 0; j < size; j++){
 				horario[i][j] = new Profesor("");
 				turnos[i][j] = t;
 				t +=4;
 			}
-			t -= 11;
 		}
 	}
 	

@@ -38,7 +38,7 @@ public class asignacion_de_turnosGenAlgoUtil{
 		for (int i = 0; i < boardSize; i++) {
 			Profesor profe = p.get(new Random().nextInt(p.size()));
 			if (!profe.getRestricciones().contains(i + 1)){
-				profe.addLocatedAt(i);
+				profe.addLocatedAt(i + 1);
 				individualRepresentation.add(profe);
 			}
 			else individualRepresentation.add(new Profesor(""));
@@ -67,8 +67,15 @@ public class asignacion_de_turnosGenAlgoUtil{
 				Profesor p = individual.getRepresentation().get(i);
 				if (p.nombre != ""){
 					List<Integer> l = p.getLocatedAt();
-					for (int j = 0; j < l.size(); j++){
-						board.addProfesorAt(board.getCoordinate(l.get(j)), p);
+					if (l.size() > 0){
+						for (int j = 0; j < l.size(); j++){
+							try{
+								
+							board.addProfesorAt(board.getCoordinate(l.get(j)), p);
+							}catch(Exception e){
+								System.out.println("ups");
+							}
+						}
 					}
 				}
 		}
@@ -85,8 +92,9 @@ public class asignacion_de_turnosGenAlgoUtil{
 			//número de profesores asignados en horarios de su preferencia y que no estén en sus restricciones
 			
 			List<XYLocation> posiciones = board.getProfesorPositions();
-		
-			for (int i = 0; i < posiciones.size(); i++){
+			List<Profesor> yaEstudiados = new ArrayList<>();
+			
+			for (int i = 0;  i < posiciones.size(); i++){
 				XYLocation pos = posiciones.get(i);
 				Profesor p = board.getProfesorAt(pos);
 				List<Integer> pref = p.getPreferencias();
@@ -102,12 +110,14 @@ public class asignacion_de_turnosGenAlgoUtil{
 				//tengo que comprobar que no haya repeticiones, que sea un reparto homogéneo
 				//necesito el número de turnos necesarios (objetivo) y el número de profesores
 				
-				if (p.getLocatedAt().size() > Math.ceil(goal / numeroDeProfesores)){
+				if (!yaEstudiados.contains(p) && p.getLocatedAt().size() > Math.ceil(goal / numeroDeProfesores)){
 					fitness -= 2.0; //por ejemplo
 				}
+				
+				yaEstudiados.add(p);
 			}
 			
-			return fitness;
+			return fitness >= 0 ? fitness : 0;
 		}
 
 		@Override

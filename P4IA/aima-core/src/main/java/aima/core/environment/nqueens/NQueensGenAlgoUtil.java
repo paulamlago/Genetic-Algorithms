@@ -34,9 +34,11 @@ public class NQueensGenAlgoUtil {
 
 	public static Individual<Integer> generateRandomIndividual(int boardSize) {
 		List<Integer> individualRepresentation = new ArrayList<Integer>();
+		
 		for (int i = 0; i < boardSize; i++) {
 			individualRepresentation.add(new Random().nextInt(boardSize));
 		}
+		
 		Individual<Integer> individual = new Individual<Integer>(individualRepresentation);
 		return individual;
 	}
