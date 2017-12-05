@@ -35,14 +35,23 @@ public class asignacion_de_turnosGenAlgoUtil{
 	public static Individual<Profesor> generateRandomIndividual(int boardSize, List<Profesor> p) {
 		List<Profesor> individualRepresentation = new ArrayList<Profesor>();
 		
-		for (int i = 0; i < boardSize; i++) {
-			Profesor profe = p.get(new Random().nextInt(p.size()));
-			if (!profe.getRestricciones().contains(i + 1) && profe.getLocatedAt().size() <= Math.ceil(goal / numeroDeProfesores)){
-				profe.addLocatedAt(i + 1);
-				individualRepresentation.add(profe);
-			}
-			else individualRepresentation.add(new Profesor(""));
+		//for (int i = 0; i < boardSize; i++) {
+		int count = 0;
+		
+		while (count < 4){
+		int i = new Random().nextInt(15);
+				Profesor profe = p.get(new Random().nextInt(p.size()));
+				if (!profe.getRestricciones().contains(i + 1) && profe.getLocatedAt().size() <= Math.ceil(goal / numeroDeProfesores)){
+					profe.addLocatedAt(i + 1);
+					individualRepresentation.add(profe);
+					count++;
+				}
+				else {
+					individualRepresentation.add(new Profesor(""));
+				}
 		}
+		//}
+				
 		Individual<Profesor> individual = new Individual<Profesor>(individualRepresentation);
 		
 		return individual;
