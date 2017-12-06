@@ -105,9 +105,9 @@ public class asignacion_de_turnos_DEMO {
 			// Generate an initial population
 			Set<Individual<Profesor>> population = new HashSet<Individual<Profesor>>();
 			
-			for (int i = 0; i < 50; i++) {
+			for (int i = 0; i < 50; i++) { //genera 50 individuos
 				Individual<Profesor> p = asignacion_de_turnosGenAlgoUtil.generateRandomIndividual(boardSize, profesores);
-		
+
 				population.add(p);
 			}
 
