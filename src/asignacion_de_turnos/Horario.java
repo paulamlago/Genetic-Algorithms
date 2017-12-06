@@ -10,12 +10,12 @@ public class Horario {
 	private Profesor[][] horario;
 	private int[][] turnos;
 	
-	private int size;
+	private final int size = 4;
 	private int turnosYaAsignados;
 	private int goal;
 	
-	public Horario(int size) {
-		this.size = size;
+	public Horario() {
+
 		this.setTurnosYaAsignados(0);
 		horario = new Profesor[size][size];
 		turnos = new int[size][size];

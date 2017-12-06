@@ -124,21 +124,19 @@ public class asignacion_de_turnosGenAlgoUtil{
 		return fab;
 	}
 	
-	public static Horario getBoardForIndividual(Individual<Profesor> individual) { //???
-		int boardSize = individual.length();
+	public static Horario getBoardForIndividual(Individual<Profesor> individual) {
+		Horario board = new Horario();
 		
-		Horario board = new Horario(boardSize);
-		
-		for (int i = 0; i < boardSize; i++) {
+		for (int i = 0; i < board.getSize(); i++) {
 				Profesor p = individual.getRepresentation().get(i);
-				if (p.nombre != ""){
+
 					List<Integer> l = p.getLocatedAt();
 					if (l.size() > 0){
 						for (int j = 0; j < l.size(); j++){
 							board.addProfesorAt(board.getCoordinate(l.get(j)), p);
 						}
 					}
-				}
+				
 		}
 
 		return board;
