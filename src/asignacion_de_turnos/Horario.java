@@ -120,27 +120,37 @@ public class Horario {
 	}
 	
 	public String toString(){
-		String s = "--- HORARIO --- \n";
+		String s = "";
 			
-		s += "\t" + "Lunes" + "\t" + "Martes" + "\t" + "Miercoles" + "\t" + "Jueves" + "\t" + "Viernes";
+		s += "\t" + "  Lunes  "+"  Martes " + "  Miercoles" + "  Jueves " + " Viernes ";
 		
 		for (int i = 0; i < size; i++){
 			switch(i){
 			case 0:
-				s += "\n 10:30" + "\t";
+				s += "\n 10:30 |";
 				break;
 			case 1:
-				s += "\n 12:00" + "\t";
+				s += "\n 12:00 |";
 				break;
 			case 2:
-				s += "\n 15:00" + "\t";
+				s += "\n 15:00 |";
 				break;
 			default:
-				s += "\n 16:30"+ "\t";
+				s += "\n 16:30 |";
 			}
 			
 			for (int j = 0; j < size; j++){
-				s+= horario[i][j].nombre + "\t";
+				if (horario[i][j].nombre != "") {
+					s+= horario[i][j].nombre;
+					
+					if (horario[i][j].nombre.length() < 9){
+						for (int k = horario[i][j].nombre.length(); k < 9; k++){
+							s += " ";
+						}
+					}
+					s += "|";
+				}
+				else s += "         |";
 			}
 		}
 		

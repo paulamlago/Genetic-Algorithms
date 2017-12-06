@@ -32,26 +32,82 @@ public class asignacion_de_turnosGenAlgoUtil{
 		return new asignacion_de_turnosGoalTest();
 	}
 	
-	public static Individual<Profesor> generateRandomIndividual(int boardSize, List<Profesor> p) {
+	public static Individual<Profesor> generateRandomIndividual(int boardSize, List<Profesor> prof) {
 		List<Profesor> individualRepresentation = new ArrayList<Profesor>();
+		List<Profesor> yaUsados = new ArrayList<>();
+		List<Integer> posYaUsadas = new ArrayList<>();
+		int turnosPorProfe = (int) Math.ceil(goal / numeroDeProfesores);
 		
-		//for (int i = 0; i < boardSize; i++) {
-		int count = 0;
+		//intentamos que quede vayan a preferentes
 		
-		while (count < 4){
+	/**	int count = 0;
+		
+		while (count < goal){
 		int i = new Random().nextInt(15);
+
+		if (!posYaUsadas.contains(i)){
 				Profesor profe = p.get(new Random().nextInt(p.size()));
-				if (!profe.getRestricciones().contains(i + 1) && profe.getLocatedAt().size() <= Math.ceil(goal / numeroDeProfesores)){
+				
+				if (!yaUsados.contains(profe)) profe.setLocatedAt(new ArrayList<>());
+						
+				if (!profe.getRestricciones().contains(i + 1) && (profe.getPreferencias().isEmpty() || profe.getPreferencias().contains(i + 1))
+						&&	profe.getLocatedAt().size() <= Math.ceil(goal / numeroDeProfesores)){
 					profe.addLocatedAt(i + 1);
 					individualRepresentation.add(profe);
 					count++;
-				}
-				else {
-					individualRepresentation.add(new Profesor(""));
+					yaUsados.add(profe);
+					posYaUsadas.add(i);
 				}
 		}
-		//}
+		}*/
+		
+		int count = 0;
+		while (count < goal){
+			Profesor profe = prof.get(new Random().nextInt(prof.size()));
+			
+			if (!yaUsados.contains(profe)){
+				profe.setLocatedAt(new ArrayList<>());
+				yaUsados.add(profe);
+				if (profe.getRestricciones().size() + turnosPorProfe >= boardSize*boardSize){
+					turnosPorProfe++; //para cubrir el de este profe
+				}
+			}
+			
+			if (profe.getLocatedAt().size() <= turnosPorProfe){ //si puedo trabajar con este profe..
+				List<Integer> p = profe.getPreferencias();
+				List<Integer> r = profe.getRestricciones();
 				
+				//trabajamos primero con los que tienen preferencias
+				if (!p.isEmpty()){
+					//recorro el tablero y si una pos no está en sus restricciones y sí en sus preferencias y no hay nadie en esa casilla lo introduzlo
+					int i = 1;
+					while (i <= boardSize*boardSize && profe.getLocatedAt().size() <= turnosPorProfe){
+						if (!posYaUsadas.contains(i) && !r.contains(i) && p.contains(i)){
+							profe.addLocatedAt(i);
+							individualRepresentation.add(profe);
+							count++;
+							posYaUsadas.add(i);
+						}
+						i++;
+					}
+				}
+				
+				//si tras asignar turnos a los que tienen preferencias nos faltan turnos que asignar:
+				if ( count < goal && yaUsados.size() == prof.size()){ 
+					int i = 1;
+	
+					while (i <= boardSize*boardSize && profe.getLocatedAt().size() <= turnosPorProfe){
+						if (!posYaUsadas.contains(i) && !r.contains(i)){
+							profe.addLocatedAt(i);
+							individualRepresentation.add(profe);
+							count++;
+							posYaUsadas.add(i);
+						}
+						i++;
+					}
+				}
+			}
+		}
 		Individual<Profesor> individual = new Individual<Profesor>(individualRepresentation);
 		
 		return individual;
@@ -96,12 +152,13 @@ public class asignacion_de_turnosGenAlgoUtil{
 			//número de profesores asignados en horarios de su preferencia y que no estén en sus restricciones
 			
 			List<XYLocation> posiciones = board.getProfesorPositions();
-			List<Profesor> yaEstudiados = new ArrayList<>();
 			
 			for (int i = 0;  i < posiciones.size(); i++){
+				List<Integer> pref = new ArrayList<>();
+				
 				XYLocation pos = posiciones.get(i);
 				Profesor p = board.getProfesorAt(pos);
-				List<Integer> pref = p.getPreferencias();
+				pref = p.getPreferencias();
 				
 				//compruebo si esá en una preferente
 				
@@ -110,18 +167,10 @@ public class asignacion_de_turnosGenAlgoUtil{
 						fitness += 1.0;
 					}
 				}
-				
-				//tengo que comprobar que no haya repeticiones, que sea un reparto homogéneo
-				//necesito el número de turnos necesarios (objetivo) y el número de profesores
-				
-				if (!yaEstudiados.contains(p) && p.getLocatedAt().size() > Math.ceil(goal / numeroDeProfesores)){
-					fitness -= 1.0; //por ejemplo
-				}
-				
-				yaEstudiados.add(p);
+
 			}
 			
-			return fitness >= 0 ? fitness : 0;
+			return fitness;
 		}
 
 		@Override

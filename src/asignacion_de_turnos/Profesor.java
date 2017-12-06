@@ -40,7 +40,10 @@ public class Profesor{
 		return locatedAt;
 	}
 
-
+	public void setLocatedAt(List<Integer> e){
+		this.locatedAt = e;
+	}
+	
 	public void addLocatedAt(Integer loc) {
 		if (!locatedAt.contains(loc)){
 			locatedAt.add(loc);

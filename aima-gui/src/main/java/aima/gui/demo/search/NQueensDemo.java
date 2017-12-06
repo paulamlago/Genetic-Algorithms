@@ -1,4 +1,4 @@
-package aima.gui.demo.search;
+
 
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -10,16 +10,17 @@ import java.util.Set;
 import aima.core.agent.Action;
 import aima.core.environment.nqueens.AttackingPairsHeuristic;
 import aima.core.environment.nqueens.NQueensBoard;
-import aima.core.environment.nqueens.NQueensBoard.Config;
+//import aima.core.environment.nqueens.NQueensBoard.Config;
 import aima.core.environment.nqueens.NQueensFunctionFactory;
-import aima.core.environment.nqueens.NQueensGenAlgoUtil;
+import aima.core.environment.nqueens.*;
 import aima.core.environment.nqueens.NQueensGoalTest;
+import aima.core.search.framework.GoalTest;
 import aima.core.search.framework.SearchAgent;
-import aima.core.search.framework.SearchForActions;
-import aima.core.search.framework.problem.GoalTest;
-import aima.core.search.framework.problem.Problem;
-import aima.core.search.framework.qsearch.GraphSearch;
-import aima.core.search.framework.qsearch.TreeSearch;
+//import aima.core.search.framework.SearchForActions;
+//import aima.core.search.framework.problem.GoalTest;
+//import aima.core.search.framework.problem.Problem;
+//import aima.core.search.framework.qsearch.GraphSearch;
+//import aima.core.search.framework.qsearch.TreeSearch;
 import aima.core.search.local.FitnessFunction;
 import aima.core.search.local.GeneticAlgorithm;
 import aima.core.search.local.HillClimbingSearch;
@@ -47,15 +48,15 @@ public class NQueensDemo {
 
 	private static void newNQueensDemo() {
 
-		nQueensWithDepthFirstSearch();
+		/**nQueensWithDepthFirstSearch();
 		nQueensWithBreadthFirstSearch();
 		nQueensWithRecursiveDLS();
 		nQueensWithIterativeDeepeningSearch();
 		nQueensSimulatedAnnealingSearch();
-		nQueensHillClimbingSearch();
+		nQueensHillClimbingSearch();*/
 		nQueensGeneticAlgorithmSearch();
 	}
-
+/**
 	private static void nQueensWithRecursiveDLS() {
 		System.out.println("\nNQueensDemo recursive DLS -->");
 		try {
@@ -153,7 +154,7 @@ public class NQueensDemo {
 			e.printStackTrace();
 		}
 	}
-
+*/
 	public static void nQueensGeneticAlgorithmSearch() {
 		System.out.println("\nNQueensDemo GeneticAlgorithm  -->");
 		try {
