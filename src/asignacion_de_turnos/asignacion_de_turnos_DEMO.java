@@ -105,13 +105,13 @@ public class asignacion_de_turnos_DEMO {
 			// Generate an initial population
 			Set<Individual<Profesor>> population = new HashSet<Individual<Profesor>>();
 			
-			for (int i = 0; i < 50; i++) { //genera 50 individuos
+			for (int i = 0; i < 50; i++) {
 				Individual<Profesor> p = asignacion_de_turnosGenAlgoUtil.generateRandomIndividual(boardSize, profesores);
-
+				System.out.println(asignacion_de_turnosGenAlgoUtil.getBoardForIndividual(p));
 				population.add(p);
 			}
 
-			GeneticAlgorithm<Profesor> ga = new GeneticAlgorithm<Profesor>(boardSize,
+			GeneticAlgorithm<Profesor> ga = new GeneticAlgorithm<Profesor>(turnosNecesarios,
 					(Set<Profesor>) asignacion_de_turnosGenAlgoUtil.getFiniteAlphabetForBoardOfSize(boardSize, profesores), 0.15);
 
 			// Run for a set amount of time
