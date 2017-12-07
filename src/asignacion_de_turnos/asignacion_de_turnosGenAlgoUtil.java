@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
-import aima.core.search.framework.GoalTest;
+import aima.core.search.framework.problem.GoalTest;
 import aima.core.search.local.FitnessFunction;
 import aima.core.search.local.Individual;
 import aima.core.util.datastructure.XYLocation;
@@ -115,7 +115,7 @@ public class asignacion_de_turnosGenAlgoUtil{
 	}
 	
 	public static Collection<Profesor> getFiniteAlphabetForBoardOfSize(int size, List<Profesor> p) {
-		Collection<Profesor> fab = new HashSet<Profesor>();
+		Collection<Profesor> fab = new ArrayList<Profesor>();
 
 		for (int i = 0; i < size; i++) {
 			fab.add(p.get(i));
@@ -175,12 +175,7 @@ public class asignacion_de_turnosGenAlgoUtil{
 			return fitness > 0 ? fitness :0;
 		}
 
-		@Override
-		public double getValue(Individual<Profesor> arg0) {
-			
-			return apply(arg0);
-		}
-
+		
 	}
 
 	public static class asignacion_de_turnosGoalTest implements GoalTest{

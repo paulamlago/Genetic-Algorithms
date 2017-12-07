@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
-import aima.core.search.framework.GoalTest;
+import aima.core.search.framework.problem.GoalTest;
 import aima.core.search.local.FitnessFunction;
 import aima.core.search.local.GeneticAlgorithm;
 import aima.core.search.local.Individual;
@@ -111,8 +111,7 @@ public class asignacion_de_turnos_DEMO {
 				population.add(p);
 			}
 
-			GeneticAlgorithm<Profesor> ga = new GeneticAlgorithm<Profesor>(turnosNecesarios,
-					(Set<Profesor>) asignacion_de_turnosGenAlgoUtil.getFiniteAlphabetForBoardOfSize(boardSize, profesores), 0.15);
+			GeneticAlgorithm<Profesor> ga = new GeneticAlgorithm<Profesor>(turnosNecesarios, profesores, 0.15);
 
 			// Run for a set amount of time
 			Individual<Profesor> bestIndividual = ga.geneticAlgorithm(population, fitnessFunction, goalTest, 1000L);
@@ -121,7 +120,7 @@ public class asignacion_de_turnos_DEMO {
 					+ asignacion_de_turnosGenAlgoUtil.getBoardForIndividual(bestIndividual));
 			System.out.println("Board Size      = " + boardSize);
 			System.out.println("# Board Layouts = " + (new BigDecimal(boardSize).pow(boardSize)));
-			System.out.println("Fitness         = " + fitnessFunction.getValue(bestIndividual));
+			System.out.println("Fitness         = " + fitnessFunction.apply(bestIndividual));
 			System.out.println("Is Goal         = " + goalTest.isGoalState(bestIndividual));
 			System.out.println("Population Size = " + ga.getPopulationSize());
 			System.out.println("Itertions       = " + ga.getIterations());
@@ -135,7 +134,7 @@ public class asignacion_de_turnos_DEMO {
 					.println("Goal Test Best Individual=\n" + asignacion_de_turnosGenAlgoUtil.getBoardForIndividual(bestIndividual));
 			System.out.println("Board Size      = " + boardSize);
 			System.out.println("# Board Layouts = " + (new BigDecimal(boardSize).pow(boardSize)));
-			System.out.println("Fitness         = " + fitnessFunction.getValue(bestIndividual));
+			System.out.println("Fitness         = " + fitnessFunction.apply(bestIndividual));
 			System.out.println("Is Goal         = " + goalTest.isGoalState(bestIndividual));
 			System.out.println("Population Size = " + ga.getPopulationSize());
 			System.out.println("Itertions       = " + ga.getIterations());

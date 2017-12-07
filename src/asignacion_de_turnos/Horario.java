@@ -51,7 +51,8 @@ public class Horario {
 			int i = loc.getXCoOrdinate();
 			int j = loc.getYCoOrdinate();
 			horario[i][j].removeLocatedAt(turnos[i][j]);
-			horario[i][j] = new Profesor(""); //dejamos un profesor vacío
+			
+			horario[i][j] = new Profesor(""); //dejamos un profesor vacï¿½o
 		}
 	}
 	
