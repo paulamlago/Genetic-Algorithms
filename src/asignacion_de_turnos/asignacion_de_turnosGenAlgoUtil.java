@@ -153,19 +153,19 @@ public class asignacion_de_turnosGenAlgoUtil{
 			
 			List<XYLocation> posiciones = board.getProfesorPositions();
 			
-			for (int i = 0;  i < posiciones.size(); i++){
+			for (int i = 0;  i < posiciones.size(); i++){ //recorre cada posición en la que hay profesores
 				List<Integer> pref = new ArrayList<>();
 				
 				XYLocation pos = posiciones.get(i);
-				Profesor p = board.getProfesorAt(pos);
+				Profesor p = board.getProfesorAt(pos); //coge al profesor de esa posición
 				pref = p.getPreferencias();
 				
-				//compruebo si esï¿½ en una preferente
+				//compruebo si esta en una preferente
 				
 				int turno = board.getTurnoAt(pos);
 				if (pref.contains(turno)) fitness += 1.0;
 				
-				//si el profe estï¿½ mï¿½s veces de las que dberï¿½a -> restamos
+				//si el profe esta mas veces de las que dberï¿½a -> restamos
 				if (p.getLocatedAt().size() > turnosPorProfe){
 					fitness-= 1.0;
 				}
@@ -173,6 +173,7 @@ public class asignacion_de_turnosGenAlgoUtil{
 			}
 			
 			return fitness > 0 ? fitness :0;
+		
 		}
 
 		

@@ -123,7 +123,7 @@ public class Horario {
 	public String toString(){
 		String s = "";
 			
-		s += "\t" + "  Lunes  "+"  Martes " + "  Miercoles" + "  Jueves " + " Viernes ";
+		s += "\t" + "  Lunes  "+"  Martes " + "  Miercoles" + "  Jueves ";
 		
 		for (int i = 0; i < size; i++){
 			switch(i){
