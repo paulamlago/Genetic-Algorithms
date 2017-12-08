@@ -115,6 +115,8 @@ public class asignacion_de_turnos_DEMO {
 			GeneticAlgorithm<Profesor> ga = new GeneticAlgorithm<Profesor>(turnosNecesarios, profesores, 0.15);
 
 			// Run for a set amount of time
+			//el hash map populaton está perfecto pero dentro de la función geneticAlgo lo convierte en una lista y todo se sobreescribe
+			
 			Individual<Profesor> bestIndividual = ga.geneticAlgorithm(population, fitnessFunction, goalTest, 1000L);
 
 			System.out.println("Max Time (1 second) Best Individual=\n"

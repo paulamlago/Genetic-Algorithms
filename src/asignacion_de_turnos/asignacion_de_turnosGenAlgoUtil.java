@@ -114,7 +114,7 @@ public class asignacion_de_turnosGenAlgoUtil{
 		return individual;
 	}
 	
-	public static Collection<Profesor> getFiniteAlphabetForBoardOfSize(int size, List<Profesor> p) {
+	public Collection<Profesor> getFiniteAlphabetForBoardOfSize(int size, List<Profesor> p) {
 		Collection<Profesor> fab = new ArrayList<Profesor>();
 
 		for (int i = 0; i < size; i++) {
