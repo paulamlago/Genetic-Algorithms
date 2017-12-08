@@ -51,7 +51,7 @@ public class Profesor{
 	}
 	
 	public String toString(){
-		String s = this.nombre + ", located at: " + this.locatedAt;
+		String s = this.locatedAt + " ";
 		return s;
 	}
 }
