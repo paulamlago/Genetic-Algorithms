@@ -1,7 +1,6 @@
 package asignacion_de_turnos;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class Profesor{
@@ -9,15 +8,22 @@ public class Profesor{
 	public String nombre;
 	private List<Integer> restricciones;
 	private List<Integer> preferencias;
-	private List<Integer> locatedAt;
+	private int locatedAt;
 	
 	public Profesor(String n){
 		this.nombre = n;
 		restricciones = new ArrayList<Integer>();
 		preferencias = new ArrayList<Integer>();
-		locatedAt = new ArrayList<Integer>();
+		//locatedAt = new ArrayList<Integer>();
+		locatedAt = -1;
 	}
 	
+	public Profesor(String n, int pos, List<Integer> restricciones, List<Integer> preferencias){
+		this.nombre = n;
+		this.restricciones = restricciones;
+		this.preferencias = preferencias;
+		locatedAt = pos;
+	}
 	
 	public void setRestricciones(List<Integer> r){
 		this.restricciones = r;
@@ -36,25 +42,16 @@ public class Profesor{
 	}
 
 
-	public List<Integer> getLocatedAt() {
+	public /**List<Integer>*/ int getLocatedAt() {
 		return locatedAt;
 	}
 
-	public void setLocatedAt(List<Integer> e){
+	public void setLocatedAt(/**List<Integer>*/ int  e){
 		this.locatedAt = e;
 	}
 	
-	public void addLocatedAt(Integer loc) {
-		if (!locatedAt.contains(loc)){
-			locatedAt.add(loc);
-		}
-	}
-	public void removeLocatedAt(Integer loc){
-		Iterator<Integer> it = locatedAt.iterator();
-		while (it.hasNext()){
-			if (it.next() == loc){
-				it.remove();
-			}
-		}
+	public String toString(){
+		String s = this.nombre + ", located at: " + this.locatedAt;
+		return s;
 	}
 }

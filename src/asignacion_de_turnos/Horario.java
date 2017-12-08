@@ -39,28 +39,28 @@ public class Horario {
 			int i = loc.getXCoOrdinate();
 			int j = loc.getYCoOrdinate();
 			if(!p.getRestricciones().contains(turnos[i][j])){
-				p.addLocatedAt(turnos[i][j]);
+				//p.setLocatedAt(turnos[i][j]);
 				horario[i][j] = p;
 				this.setTurnosYaAsignados(this.getTurnosYaAsignados() + 1);
 			}
 		}
 	}
 
-	public void removeProfesorAt(XYLocation loc){
+	/**public void removeProfesorAt(XYLocation loc){
 		if (ProfesorExistsAt(loc)){
 			int i = loc.getXCoOrdinate();
 			int j = loc.getYCoOrdinate();
-			horario[i][j].removeLocatedAt(turnos[i][j]);
+			horario[i][j].setLocatedAt(-1);
 			
 			horario[i][j] = new Profesor(""); //dejamos un profesor vac�o
 		}
-	}
+	}*/
 	
 	public boolean ProfesorExistsAt(XYLocation l) {
 		return (ProfesorExistsAt(l.getXCoOrdinate(), l.getYCoOrdinate()));
 	}
 	private boolean ProfesorExistsAt(int x, int y) {
-		return (horario[x][y].nombre != "");
+		return horario[x][y].nombre != "";
 	}
 
 	public int getSize() {
@@ -97,6 +97,7 @@ public class Horario {
 	public XYLocation getCoordinate(int loc){
 
 		XYLocation sol = null;
+		
 		for (int i = 0; i < size; i++){
 			for (int j = 0; j < size; j++){
 				if (turnos[i][j] == loc){

@@ -2,6 +2,7 @@ package asignacion_de_turnos;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -34,80 +35,25 @@ public class asignacion_de_turnosGenAlgoUtil{
 	
 	public static Individual<Profesor> generateRandomIndividual(int boardSize, List<Profesor> prof) {
 		List<Profesor> individualRepresentation = new ArrayList<Profesor>();
-		List<Profesor> yaUsados = new ArrayList<>();
 		List<Integer> posYaUsadas = new ArrayList<>();
-		//int turnosPorProfe = (int) Math.ceil(goal / numeroDeProfesores);
-		
-		//esto simplemente asigna profesores en turnos siempre que no estï¿½ en sus reestricciones
+
+		//esto simplemente asigna profesores en turnos siempre que no esten en sus reestricciones
 		
 		int count = 0;
 		
 		while (count < goal){
-			int i = new Random().nextInt(15);
+			int i = new Random().nextInt(16) + 1;
 	
 			if (!posYaUsadas.contains(i)){
 					Profesor profe = prof.get(new Random().nextInt(prof.size()));
 					
-					if (!yaUsados.contains(profe)) profe.setLocatedAt(new ArrayList<>());
-							
-					if (!profe.getRestricciones().contains(i + 1)){
-						profe.addLocatedAt(i + 1);
-						individualRepresentation.add(profe);
+					if (!profe.getRestricciones().contains(i)){
+						individualRepresentation.add(new Profesor(profe.nombre, i, profe.getRestricciones(), profe.getPreferencias()));
 						count++;
-						yaUsados.add(profe);
 						posYaUsadas.add(i);
 					}
 			}
 		}
-		
-		/**
-		int count = 0;
-		while (count < goal){
-			Profesor profe = prof.get(new Random().nextInt(prof.size()));
-			
-			if (!yaUsados.contains(profe)){
-				profe.setLocatedAt(new ArrayList<>());
-				yaUsados.add(profe);
-				if (profe.getRestricciones().size() + turnosPorProfe >= boardSize*boardSize){
-					turnosPorProfe++; //para cubrir el de este profe
-				}
-			}
-			
-			if (profe.getLocatedAt().size() <= turnosPorProfe){ //si puedo trabajar con este profe..
-				List<Integer> p = profe.getPreferencias();
-				List<Integer> r = profe.getRestricciones();
-				
-				//trabajamos primero con los que tienen preferencias
-				if (!p.isEmpty()){
-					//recorro el tablero y si una pos no estï¿½ en sus restricciones y sï¿½ en sus preferencias y no hay nadie en esa casilla lo introduzlo
-					int i = 1;
-					while (i <= boardSize*boardSize && profe.getLocatedAt().size() <= turnosPorProfe){
-						if (!posYaUsadas.contains(i) && !r.contains(i) && p.contains(i)){
-							profe.addLocatedAt(i);
-							individualRepresentation.add(profe);
-							count++;
-							posYaUsadas.add(i);
-						}
-						i++;
-					}
-				}
-				
-				//si tras asignar turnos a los que tienen preferencias nos faltan turnos que asignar:
-				if ( count < goal && yaUsados.size() == prof.size()){ 
-					int i = 1;
-	
-					while (i <= boardSize*boardSize && profe.getLocatedAt().size() <= turnosPorProfe){
-						if (!posYaUsadas.contains(i) && !r.contains(i)){
-							profe.addLocatedAt(i);
-							individualRepresentation.add(profe);
-							count++;
-							posYaUsadas.add(i);
-						}
-						i++;
-					}
-				}
-			}
-		}*/
 		
 		Individual<Profesor> individual = new Individual<Profesor>(individualRepresentation);
 		
@@ -127,18 +73,16 @@ public class asignacion_de_turnosGenAlgoUtil{
 	public static Horario getBoardForIndividual(Individual<Profesor> individual) {
 		Horario board = new Horario();
 		List<Profesor> representation = individual.getRepresentation();
+
 		for (int i = 0; i < representation.size(); i++) {
 				Profesor p = representation.get(i);
-
-					List<Integer> l = p.getLocatedAt();
-					if (l.size() > 0){
-						for (int j = 0; j < l.size(); j++){
-							board.addProfesorAt(board.getCoordinate(l.get(j)), p);
-						}
-					}
 				
+				if (p.getLocatedAt() != -1){
+					board.addProfesorAt(board.getCoordinate(p.getLocatedAt()), p);
+				}
 		}
 
+	
 		return board;
 	}
 	
@@ -152,8 +96,10 @@ public class asignacion_de_turnosGenAlgoUtil{
 			double turnosPorProfe = Math.ceil((double) goal / numeroDeProfesores);
 			
 			List<XYLocation> posiciones = board.getProfesorPositions();
+			HashMap<String, List<Integer>> profes = new HashMap<String, List<Integer>>(); //para ver cada profe en qué posiciones está asignado
 			
 			for (int i = 0;  i < posiciones.size(); i++){ //recorre cada posición en la que hay profesores
+		
 				List<Integer> pref = new ArrayList<>();
 				
 				XYLocation pos = posiciones.get(i);
@@ -165,11 +111,24 @@ public class asignacion_de_turnosGenAlgoUtil{
 				int turno = board.getTurnoAt(pos);
 				if (pref.contains(turno)) fitness += 1.0;
 				
-				//si el profe esta mas veces de las que dberï¿½a -> restamos
-				if (p.getLocatedAt().size() > turnosPorProfe){
-					fitness-= 1.0;
+				//lo meto en el hash map
+				if (!profes.containsKey(p)){
+					List<Integer> x = new ArrayList<Integer>();
+					x.add(p.getLocatedAt());
+					profes.put(p.nombre, x);
 				}
-				else fitness += 0.5;
+				else{
+					profes.get(p.nombre).add(p.getLocatedAt());
+				}
+			}
+			
+			//tenemos en el hash map los profesores con una lista de las posiciones en las que estan
+			//si el tamaño de esa lista supera turnosPorProfe restamos fitness
+			
+			for (HashMap.Entry<String, List<Integer>> entry : profes.entrySet()) {
+				if (entry.getValue().size() > turnosPorProfe){
+					fitness -= 1;
+				}
 			}
 			
 			return fitness > 0 ? fitness :0;
@@ -184,9 +143,9 @@ public class asignacion_de_turnosGenAlgoUtil{
 		@Override
 		public boolean isGoalState(Object state) {
 			Individual<Profesor> e = (Individual<Profesor>) state;
-			Horario h = getBoardForIndividual(e);
+			Horario board = getBoardForIndividual(e);
 			
-			return goal == h.getTurnosYaAsignados() ? true : false;
+			return goal == board.getTurnosYaAsignados() ? true : false;
 		}
 
 	}
