@@ -5,4 +5,5 @@
 	<classpathentry kind="lib" path="release/aima-core.jar" sourcepath="aima-core/src"/>
 	<classpathentry kind="lib" path="C:/Users/Paula/Documents/Tercero/IA/P4IA/P4IA/release/aima-gui.jar" sourcepath="aima-gui/src/main/java/aima/gui/demo"/>
 	<classpathentry kind="output" path="bin"/>
+	<referencedentry kind="lib" path="C:/Users/Paula/Documents/Tercero/IA/P4IA/P4IA/release/aima-core.jar" sourcepath="aima-core/src/main/java/aima/core/environment/nqueens"/>
 </classpath>

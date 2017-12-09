@@ -3,7 +3,7 @@ package asignacion_de_turnos;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Profesor{
+public class Profesor implements Comparable<Profesor>{
 
 	public String nombre;
 	private List<Integer> restricciones;
@@ -52,5 +52,13 @@ public class Profesor{
 	public String toString(){
 		String s = this.locatedAt + " ";
 		return s;
+	}
+
+	@Override
+	public int compareTo(Profesor arg0) {
+		if (this.locatedAt < arg0.locatedAt){
+			return -1;
+		}
+		return 1;
 	}
 }
