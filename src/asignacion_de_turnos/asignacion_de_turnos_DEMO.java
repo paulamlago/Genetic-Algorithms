@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
+import aima.core.environment.nqueens.NQueensGenAlgoUtil;
 import aima.core.search.framework.problem.GoalTest;
 import aima.core.search.local.FitnessFunction;
 import aima.core.search.local.GeneticAlgorithm;
@@ -109,12 +110,13 @@ public class asignacion_de_turnos_DEMO {
 			for (int i = 0; i < 50; i++) {
 				Individual<Profesor> p = asignacion_de_turnosGenAlgoUtil.generateRandomIndividual(boardSize, profesores);
 				
-				System.out.println("\n "  + i + "\n" +asignacion_de_turnosGenAlgoUtil.getBoardForIndividual(p) + "\n Fitness: " + fitnessFunction.apply(p)+"\n");
+				//System.out.println("\n "  + i + "\n" +asignacion_de_turnosGenAlgoUtil.getBoardForIndividual(p) + "\n Fitness: " + fitnessFunction.apply(p)+"\n");
 				
 				population.add(p);
 			}
 
-			GeneticAlgorithm<Profesor> ga = new GeneticAlgorithm<Profesor>(turnosNecesarios, profesores, 0.15);
+			GeneticAlgorithm<Profesor> ga = new GeneticAlgorithm<Profesor>(turnosNecesarios, 
+					asignacion_de_turnosGenAlgoUtil.getFiniteAlphabetForBoardOfSize(boardSize, profesores), 0.15);
 			
 			// Run for a set amount of time			
 			Individual<Profesor> bestIndividual = ga.geneticAlgorithm(population, fitnessFunction, goalTest, 1000L);

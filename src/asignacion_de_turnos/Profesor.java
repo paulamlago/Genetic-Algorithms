@@ -14,7 +14,6 @@ public class Profesor{
 		this.nombre = n;
 		restricciones = new ArrayList<Integer>();
 		preferencias = new ArrayList<Integer>();
-		//locatedAt = new ArrayList<Integer>();
 		locatedAt = -1;
 	}
 	

@@ -60,10 +60,10 @@ public class asignacion_de_turnosGenAlgoUtil{
 		return individual;
 	}
 	
-	public Collection<Profesor> getFiniteAlphabetForBoardOfSize(int size, List<Profesor> p) {
+	public static Collection<Profesor> getFiniteAlphabetForBoardOfSize(int size, List<Profesor> p) {
 		Collection<Profesor> fab = new ArrayList<Profesor>();
 
-		for (int i = 0; i < size; i++) {
+		for (int i = 0; i < p.size(); i++) {
 			fab.add(p.get(i));
 		}
 
