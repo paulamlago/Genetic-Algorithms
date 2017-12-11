@@ -115,7 +115,7 @@ public class asignacion_de_turnosGenAlgoUtil{
 				if (pref.contains(turno)) fitness += 1.0;
 				
 				//lo meto en el hash map
-				if (!profes.containsKey(p)){
+				if (!profes.containsKey(p.nombre)){
 					List<Integer> x = new ArrayList<Integer>();
 					x.add(p.getLocatedAt());
 					profes.put(p.nombre, x);
@@ -130,7 +130,7 @@ public class asignacion_de_turnosGenAlgoUtil{
 			
 			for (HashMap.Entry<String, List<Integer>> entry : profes.entrySet()) {
 				if (entry.getValue().size() > turnosPorProfe){
-					fitness -= 1;
+					fitness -= entry.getValue().size() - turnosPorProfe;
 				}
 			}
 			
