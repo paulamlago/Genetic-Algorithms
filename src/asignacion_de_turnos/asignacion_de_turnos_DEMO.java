@@ -2,14 +2,12 @@ package asignacion_de_turnos;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
-import aima.core.environment.nqueens.NQueensGenAlgoUtil;
 import aima.core.search.framework.problem.GoalTest;
 import aima.core.search.local.FitnessFunction;
 import aima.core.search.local.GeneticAlgorithm;
@@ -114,7 +112,7 @@ public class asignacion_de_turnos_DEMO {
 			}
 
 			GeneticAlgorithm<Profesor> ga = new GeneticAlgorithm<Profesor>(turnosNecesarios, 
-					asignacion_de_turnosGenAlgoUtil.getFiniteAlphabetForBoardOfSize(boardSize, profesores), 0.15);
+					asignacion_de_turnosGenAlgoUtil.getFiniteAlphabetForBoardOfSize(boardSize, profesores), 0.15, 0.8);
 			
 			// Run for a set amount of time			
 			Individual<Profesor> bestIndividual = ga.geneticAlgorithm(population, fitnessFunction, goalTest, 1000L);

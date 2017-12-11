@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
+import java.util.zip.CRC32;
 
 import aima.core.search.framework.Metrics;
 import aima.core.search.framework.problem.GoalTest;
@@ -62,21 +63,21 @@ public class GeneticAlgorithm<A> {
 	protected int individualLength;
 	protected List<A> finiteAlphabet;
 	protected double mutationProbability;
-	
+	protected double crossoverProbability;
 	protected Random random;
 	private List<ProgressTracer<A>> progressTracers = new ArrayList<ProgressTracer<A>>();
 
-	public GeneticAlgorithm(int individualLength, Collection<A> finiteAlphabet, double mutationProbability) {
-		this(individualLength, finiteAlphabet, mutationProbability, new Random());
+	public GeneticAlgorithm(int individualLength, Collection<A> finiteAlphabet, double mutationProbability,double crossoverProbability) {
+		this(individualLength, finiteAlphabet, mutationProbability, new Random(), crossoverProbability);
 	}
 
 	public GeneticAlgorithm(int individualLength, Collection<A> finiteAlphabet, double mutationProbability,
-			Random random) {
+			Random random, double crossoverProbability) {
 		this.individualLength = individualLength;
 		this.finiteAlphabet = new ArrayList<A>(finiteAlphabet);
 		this.mutationProbability = mutationProbability;
 		this.random = random;
-
+		this.crossoverProbability= crossoverProbability;
 		assert (this.mutationProbability >= 0.0 && this.mutationProbability <= 1.0);
 	}
 
@@ -238,19 +239,21 @@ public class GeneticAlgorithm<A> {
 		// new_population <- empty set
 		List<Individual<A>> newPopulation = new ArrayList<Individual<A>>(population.size());
 		// for i = 1 to SIZE(population) do
+		
 		for (int i = 0; i < population.size(); i++) {
 			// x <- RANDOM-SELECTION(population, FITNESS-FN)
 			Individual<A> x = randomSelection(population, fitnessFn);
 			// y <- RANDOM-SELECTION(population, FITNESS-FN)
 			Individual<A> y = randomSelection(population, fitnessFn);
 			// child <- REPRODUCE(x, y)
-			Individual<A> child = reproduce(x, y);
+			List<Individual<A>> children = reproduceTwoKiddos(x, y);
 			// if (small random probability) then child <- MUTATE(child)
 			if (random.nextDouble() <= mutationProbability) {
-				child = mutate(child);
+				mutate(children.get(0));
+				mutate(children.get(1));
 			}
 			// add child to new_population
-			newPopulation.add(child);
+			newPopulation.addAll(children);
 		}
 		notifyProgressTracers(getIterations(), population);
 		return newPopulation;
@@ -301,6 +304,29 @@ public class GeneticAlgorithm<A> {
 		return child;
 	}
 
+	// function REPRODUCE(x, y) returns two individuals
+		// inputs: x, y, parent individuals
+		protected List<Individual<A>> reproduceTwoKiddos(Individual<A> x, Individual<A> y) {
+			// n <- LENGTH(x);
+			// Note: this is = this.individualLength
+			// c <- random number from 1 to n
+			int c = randomOffset(individualLength);
+			// return APPEND(SUBSTRING(x, 1, c), SUBSTRING(y, c+1, n))
+			List<A> childRepresentation = new ArrayList<A>();
+			childRepresentation.addAll(x.getRepresentation().subList(0, c));
+			childRepresentation.addAll(y.getRepresentation().subList(c, individualLength));
+			List<A> childRepresentation2 = new ArrayList<A>();
+			childRepresentation2.addAll(y.getRepresentation().subList(0, c));
+			childRepresentation2.addAll(x.getRepresentation().subList(c, individualLength));
+
+			Individual<A> child = new Individual<A>(childRepresentation);
+			Individual<A> child2 = new Individual<A>(childRepresentation);
+			List<Individual<A>> children = new ArrayList<Individual<A>>(2);
+			children.add(child);
+			children.add(child2);
+			return children;
+		}
+
 	protected Individual<A> mutate(Individual<A> child) {
 		int mutateOffset = randomOffset(individualLength);
 		int alphaOffset = randomOffset(finiteAlphabet.size());
@@ -313,6 +339,7 @@ public class GeneticAlgorithm<A> {
 
 		return mutatedChild;
 	}
+
 
 	protected int randomOffset(int length) {
 		return random.nextInt(length);
