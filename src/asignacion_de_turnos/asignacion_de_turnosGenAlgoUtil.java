@@ -40,9 +40,8 @@ public class asignacion_de_turnosGenAlgoUtil{
 		//esto simplemente asigna profesores en turnos siempre que no esten en sus reestricciones
 		
 		int count = 0;
-		//int i = 1;
-		
-		while (count < goal /**&& i <= boardSize*boardSize*/){
+
+		while (count < goal){
 			int i = new Random().nextInt(16) + 1;
 	
 			if (!posYaUsadas.contains(i)){
@@ -54,9 +53,7 @@ public class asignacion_de_turnosGenAlgoUtil{
 						posYaUsadas.add(i);
 					}
 			}
-			
-			/**if (i == boardSize*boardSize - 1) i = 1; // lo volvemos a recorrer
-			else i++;*/
+
 		}
 		
 		Collections.sort(individualRepresentation);
