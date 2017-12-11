@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
-import java.util.zip.CRC32;
 
 import aima.core.search.framework.Metrics;
 import aima.core.search.framework.problem.GoalTest;
