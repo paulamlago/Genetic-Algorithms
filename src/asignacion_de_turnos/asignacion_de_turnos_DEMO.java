@@ -109,9 +109,7 @@ public class asignacion_de_turnos_DEMO {
 			
 			for (int i = 0; i < 50; i++) {
 				Individual<Profesor> p = asignacion_de_turnosGenAlgoUtil.generateRandomIndividual(boardSize, profesores);
-				
-				System.out.println("\n "  + i + "\n" +asignacion_de_turnosGenAlgoUtil.getBoardForIndividual(p) + "\n Fitness: " + fitnessFunction.apply(p)+"\n");
-				
+							
 				population.add(p);
 			}
 
