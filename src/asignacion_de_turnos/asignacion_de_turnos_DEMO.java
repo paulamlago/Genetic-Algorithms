@@ -56,7 +56,7 @@ public class asignacion_de_turnos_DEMO {
 				restricciones[0] = restricciones[0].substring(1); //para quitarle el espacio inicial
 				
 				for(int i = 0; i < restricciones.length; i++){
-					if (restricciones[i] != "") r.add(Integer.valueOf(restricciones[i]));
+					if (restricciones[i] != "") r.add(Integer.valueOf(restricciones[i].replace(" ", "")));
 				}
 				
 			}
@@ -84,7 +84,7 @@ public class asignacion_de_turnos_DEMO {
 				preferencias[0] = preferencias[0].substring(1); //para quitarle el espacio inicial
 				
 				for(int i = 0; i < preferencias.length; i++){
-					if (preferencias[i] != "") p.add(Integer.valueOf(preferencias[i]));
+					if (preferencias[i] != "") p.add(Integer.valueOf(preferencias[i].replace(" ", "")));
 				}
 				
 				Profesor e = it.next();
