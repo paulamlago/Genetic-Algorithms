@@ -35,7 +35,7 @@ public class GeneticAlgorithmForNumbers extends GeneticAlgorithm<Double> {
 	 *            probability of mutations.
 	 */
 	public GeneticAlgorithmForNumbers(int individualLength, double min, double max, double mutationProbability) {
-		super(individualLength, Collections.<Double> emptySet(), mutationProbability, 1);
+		super(individualLength, Collections.<Double> emptySet(), mutationProbability);
 		minimum = min;
 		maximum = max;
 	}

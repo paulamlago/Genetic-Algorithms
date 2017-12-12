@@ -40,7 +40,7 @@ public class asignacion_de_turnosGenAlgoUtil{
 		//esto simplemente asigna profesores en turnos siempre que no esten en sus reestricciones
 		
 		int count = 0;
-
+		
 		while (count < goal){
 			int i = new Random().nextInt(16) + 1;
 	
@@ -53,7 +53,7 @@ public class asignacion_de_turnosGenAlgoUtil{
 						posYaUsadas.add(i);
 					}
 			}
-
+		
 		}
 		
 		Collections.sort(individualRepresentation);
@@ -63,7 +63,7 @@ public class asignacion_de_turnosGenAlgoUtil{
 		return individual;
 	}
 	
-	public static Collection<Profesor> getFiniteAlphabetForBoardOfSize(int size, List<Profesor> p) {
+	public static Collection<Profesor> getFiniteAlphabetForBoardOfSize(List<Profesor> p) {
 		Collection<Profesor> fab = new ArrayList<Profesor>();
 
 		for (int i = 0; i < p.size(); i++) {
@@ -76,7 +76,7 @@ public class asignacion_de_turnosGenAlgoUtil{
 	public static Horario getBoardForIndividual(Individual<Profesor> individual) {
 		Horario board = new Horario();
 		List<Profesor> representation = individual.getRepresentation();
-
+		
 		for (int i = 0; i < representation.size(); i++) {
 				Profesor p = representation.get(i);
 				
@@ -95,45 +95,57 @@ public class asignacion_de_turnosGenAlgoUtil{
 			
 			double fitness = 0.0;
 			Horario board = getBoardForIndividual(individual);
-			//nï¿½mero de profesores asignados en horarios de su preferencia y que no estï¿½n en sus restricciones
+			//numero de profesores asignados en horarios de su preferencia y que no estÃ¯Â¿Â½n en sus restricciones
 			double turnosPorProfe = Math.ceil((double) goal / numeroDeProfesores);
 			
 			List<XYLocation> posiciones = board.getProfesorPositions();
-			HashMap<String, List<Integer>> profes = new HashMap<String, List<Integer>>(); //para ver cada profe en qué posiciones está asignado
+			HashMap<String, List<Integer>> profes = new HashMap<String, List<Integer>>(); //para ver cada profe en quÃ© posiciones estÃ¡ asignado
 			
-			for (int i = 0;  i < posiciones.size(); i++){ //recorre cada posición en la que hay profesores
-		
-				List<Integer> pref = new ArrayList<>();
-				
-				XYLocation pos = posiciones.get(i);
-				Profesor p = board.getProfesorAt(pos); //coge al profesor de esa posición
-				pref = p.getPreferencias();
-				
-				//compruebo si esta en una preferente
-				
-				int turno = board.getTurnoAt(pos);
-				if (pref.contains(turno)) fitness += 1.0;
-				
-				//lo meto en el hash map
-				if (!profes.containsKey(p.nombre)){
-					List<Integer> x = new ArrayList<Integer>();
-					x.add(p.getLocatedAt());
-					profes.put(p.nombre, x);
+			//primero compruebo lo mas grave, que tras las mutaciones dos profesores estén en la misma posicion
+			//es decir, no se cumple el objetivo, en ese caso es la peor fitness
+			if (board.getTurnosYaAsignados() != goal) fitness = 0;
+			else{
+				//si no es asi, vemos que cada profesor esté en una preferente
+				for (int i = 0;  i < posiciones.size(); i++){ //recorre cada posicion en la que hay profesores
+			
+					List<Integer> pref = new ArrayList<>();
+					List<Integer> rest = new ArrayList<>();
+					
+					XYLocation pos = posiciones.get(i);
+					Profesor p = board.getProfesorAt(pos); //coge al profesor de esa posiciÃ³n
+					pref = p.getPreferencias();
+					rest = p.getRestricciones();
+					
+					//compruebo si esta en una preferente
+					
+					int turno = board.getTurnoAt(pos);
+					if (pref.contains(turno)) fitness += 1.0;
+					if (rest.contains(turno)) {
+						fitness = 0;
+						break;
+					}
+					
+					//lo meto en el hash map
+					if (!profes.containsKey(p.nombre)){
+						List<Integer> x = new ArrayList<Integer>();
+						x.add(p.getLocatedAt());
+						profes.put(p.nombre, x);
+					}
+					else{
+						profes.get(p.nombre).add(p.getLocatedAt());
+					}
 				}
-				else{
-					profes.get(p.nombre).add(p.getLocatedAt());
+			
+				//tenemos en el hash map los profesores con una lista de las posiciones en las que estan
+				//si el tamaÃ±o de esa lista supera turnosPorProfe restamos fitness
+				//la restamos en proporcion
+				for (HashMap.Entry<String, List<Integer>> entry : profes.entrySet()) {
+					if (entry.getValue().size() > turnosPorProfe){
+						fitness -= entry.getValue().size() - turnosPorProfe;
+					}
 				}
+			
 			}
-			
-			//tenemos en el hash map los profesores con una lista de las posiciones en las que estan
-			//si el tamaño de esa lista supera turnosPorProfe restamos fitness
-			
-			for (HashMap.Entry<String, List<Integer>> entry : profes.entrySet()) {
-				if (entry.getValue().size() > turnosPorProfe){
-					fitness -= entry.getValue().size() - turnosPorProfe;
-				}
-			}
-			
 			return fitness > 0 ? fitness :0;
 		
 		}
@@ -147,8 +159,42 @@ public class asignacion_de_turnosGenAlgoUtil{
 		public boolean isGoalState(Object state) {
 			Individual<Profesor> e = (Individual<Profesor>) state;
 			Horario board = getBoardForIndividual(e);
+			HashMap<String, List<Integer>> profes = new HashMap<String, List<Integer>>(); //para ver cada profe en qué posiciones está asignado
 			
-			return goal == board.getTurnosYaAsignados() ? true : false;
+			
+			if (goal == board.getTurnosYaAsignados()){
+				//recorremos el tablero para comprobar que todos profesores están en posiciones prioritarias
+				Boolean okay = true;
+				List<Profesor> p = e.getRepresentation();
+				
+				int i = 0;
+				while (okay && i < p.size()){
+					okay = p.get(i).locatedAtPreference();
+										
+					if (!profes.containsKey(p.get(i).nombre)){
+						List<Integer> x = new ArrayList<Integer>();
+						x.add(p.get(i).getLocatedAt());
+						profes.put(p.get(i).nombre, x);
+					}
+					else{
+						profes.get(p.get(i).nombre).add(p.get(i).getLocatedAt());
+					}
+					
+					i++;
+				}
+				
+				//recorremos el hash para ver si cada profe está el número de veces que le corresponde
+				
+				for (HashMap.Entry<String, List<Integer>> entry : profes.entrySet()) {
+					if (entry.getValue().size() > Math.ceil((double) goal / numeroDeProfesores)){
+						return false;
+					}
+				}
+
+				if (okay) return true;
+				else return false;
+			}
+			else return false;
 		}
 
 	}

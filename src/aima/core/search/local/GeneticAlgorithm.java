@@ -62,22 +62,21 @@ public class GeneticAlgorithm<A> {
 	protected int individualLength;
 	protected List<A> finiteAlphabet;
 	protected double mutationProbability;
-	protected double crossoverProbability;
+	
 	protected Random random;
 	private List<ProgressTracer<A>> progressTracers = new ArrayList<ProgressTracer<A>>();
 
-	public GeneticAlgorithm(int individualLength, Collection<A> finiteAlphabet, double mutationProbability,
-			double crossoverProbability) {
-		this(individualLength, finiteAlphabet, mutationProbability, new Random(), crossoverProbability);
+	public GeneticAlgorithm(int individualLength, Collection<A> finiteAlphabet, double mutationProbability) {
+		this(individualLength, finiteAlphabet, mutationProbability, new Random());
 	}
 
 	public GeneticAlgorithm(int individualLength, Collection<A> finiteAlphabet, double mutationProbability,
-			Random random, double crossoverProbability) {
+			Random random) {
 		this.individualLength = individualLength;
 		this.finiteAlphabet = new ArrayList<A>(finiteAlphabet);
 		this.mutationProbability = mutationProbability;
 		this.random = random;
-		this.crossoverProbability = crossoverProbability;
+
 		assert (this.mutationProbability >= 0.0 && this.mutationProbability <= 1.0);
 	}
 
@@ -85,25 +84,25 @@ public class GeneticAlgorithm<A> {
 	public void addProgressTracer(ProgressTracer<A> pTracer) {
 		progressTracers.add(pTracer);
 	}
-
+	
 	/**
 	 * Starts the genetic algorithm and stops after a specified number of
 	 * iterations.
 	 */
-	public Individual<A> geneticAlgorithm(Collection<Individual<A>> initPopulation, FitnessFunction<A> fitnessFn,
-			final int maxIterations) {
+	public Individual<A> geneticAlgorithm(Collection<Individual<A>> initPopulation,
+			FitnessFunction<A> fitnessFn, final int maxIterations) {
 		GoalTest goalTest = new GoalTest() {
 			@Override
 			public boolean isGoalState(Object state) {
 				return getIterations() >= maxIterations;
-			}
-		};
+			}};
 		return geneticAlgorithm(initPopulation, fitnessFn, goalTest, 0L);
 	}
-
+	
 	/**
 	 * Template method controlling search. It returns the best individual in the
-	 * specified population, according to the specified FITNESS-FN and goal test.
+	 * specified population, according to the specified FITNESS-FN and goal
+	 * test.
 	 * 
 	 * @param population
 	 *            a set of individuals
@@ -114,8 +113,8 @@ public class GeneticAlgorithm<A> {
 	 *            return. Can be used in subclasses to implement additional
 	 *            termination criteria, e.g. maximum number of iterations.
 	 * @param maxTimeMilliseconds
-	 *            the maximum time in milliseconds that the algorithm is to run for
-	 *            (approximate). Only used if > 0L.
+	 *            the maximum time in milliseconds that the algorithm is to run
+	 *            for (approximate). Only used if > 0L.
 	 * @return the best individual in the specified population, according to the
 	 *         specified FITNESS-FN and goal test.
 	 */
@@ -232,37 +231,27 @@ public class GeneticAlgorithm<A> {
 	// behavior.
 	//
 	/**
-	 * Primitive operation which is responsible for creating the next generation.
-	 * Override to get progress information!
+	 * Primitive operation which is responsible for creating the next
+	 * generation. Override to get progress information!
 	 */
 	protected List<Individual<A>> nextGeneration(List<Individual<A>> population, FitnessFunction<A> fitnessFn) {
 		// new_population <- empty set
 		List<Individual<A>> newPopulation = new ArrayList<Individual<A>>(population.size());
 		// for i = 1 to SIZE(population) do
-
 		for (int i = 0; i < population.size(); i++) {
-			double prob = random.nextDouble();
 			// x <- RANDOM-SELECTION(population, FITNESS-FN)
 			Individual<A> x = randomSelection(population, fitnessFn);
 			// y <- RANDOM-SELECTION(population, FITNESS-FN)
 			Individual<A> y = randomSelection(population, fitnessFn);
 			// child <- REPRODUCE(x, y)
-			List<Individual<A>> children = new ArrayList<Individual<A>>(2);
-			if (prob < crossoverProbability) {
-				children = reproduceTwoKiddos(x, y);
-			} else {
-				children.add(x);
-				children.add(y);
-			}
+			Individual<A> child = reproduce(x, y);
 			// if (small random probability) then child <- MUTATE(child)
 			if (random.nextDouble() <= mutationProbability) {
-				mutate(children.get(0));
-				mutate(children.get(1));
+				child = mutate(child);
 			}
 			// add child to new_population
-			newPopulation.addAll(children);
+			newPopulation.add(child);
 		}
-
 		notifyProgressTracers(getIterations(), population);
 		return newPopulation;
 	}
@@ -312,29 +301,6 @@ public class GeneticAlgorithm<A> {
 		return child;
 	}
 
-	// function REPRODUCE(x, y) returns two individuals
-	// inputs: x, y, parent individuals
-	protected List<Individual<A>> reproduceTwoKiddos(Individual<A> x, Individual<A> y) {
-		// n <- LENGTH(x);
-		// Note: this is = this.individualLength
-		// c <- random number from 1 to n
-		int c = randomOffset(individualLength);
-		// return APPEND(SUBSTRING(x, 1, c), SUBSTRING(y, c+1, n))
-		List<A> childRepresentation = new ArrayList<A>();
-		childRepresentation.addAll(x.getRepresentation().subList(0, c));
-		childRepresentation.addAll(y.getRepresentation().subList(c, individualLength));
-		List<A> childRepresentation2 = new ArrayList<A>();
-		childRepresentation2.addAll(y.getRepresentation().subList(0, c));
-		childRepresentation2.addAll(x.getRepresentation().subList(c, individualLength));
-
-		Individual<A> child = new Individual<A>(childRepresentation);
-		Individual<A> child2 = new Individual<A>(childRepresentation);
-		List<Individual<A>> children = new ArrayList<Individual<A>>(2);
-		children.add(child);
-		children.add(child2);
-		return children;
-	}
-
 	protected Individual<A> mutate(Individual<A> child) {
 		int mutateOffset = randomOffset(individualLength);
 		int alphaOffset = randomOffset(finiteAlphabet.size());
@@ -367,12 +333,12 @@ public class GeneticAlgorithm<A> {
 			}
 		}
 	}
-
-	private void notifyProgressTracers(int itCount, Collection<Individual<A>> generation) {
+	
+	protected void notifyProgressTracers(int itCount, Collection<Individual<A>> generation) {
 		for (ProgressTracer<A> tracer : progressTracers)
 			tracer.traceProgress(getIterations(), generation);
 	}
-
+	
 	/**
 	 * Interface for progress tracers.
 	 * 

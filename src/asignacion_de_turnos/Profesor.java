@@ -41,11 +41,11 @@ public class Profesor implements Comparable<Profesor>{
 	}
 
 
-	public /**List<Integer>*/ int getLocatedAt() {
+	public int getLocatedAt() {
 		return locatedAt;
 	}
 
-	public void setLocatedAt(/**List<Integer>*/ int  e){
+	public void setLocatedAt(int  e){
 		this.locatedAt = e;
 	}
 	
@@ -53,7 +53,20 @@ public class Profesor implements Comparable<Profesor>{
 		String s = this.locatedAt + " ";
 		return s;
 	}
-
+	
+	public Boolean locatedAtPreference(){
+		int i = 0;
+		Boolean preferencia = false;
+		while (i < preferencias.size()){
+			if (preferencias.get(i) == locatedAt){
+				preferencia = true;
+			}
+			i++;
+		}
+		//if (preferencias.size() == 0) return true;
+		return preferencia;
+	}
+	
 	@Override
 	public int compareTo(Profesor arg0) {
 		if (this.locatedAt < arg0.locatedAt){
