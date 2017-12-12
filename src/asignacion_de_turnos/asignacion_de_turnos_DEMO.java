@@ -156,7 +156,7 @@ public class asignacion_de_turnos_DEMO {
 				Individual<Profesor> bestIndividual;
 
 				//run for 5 seconds
-				bestIndividual = ga.geneticAlgorithm(population, fitnessFunction, goalTest, 5000L);
+				bestIndividual = ga.geneticAlgorithm(population, fitnessFunction, goalTest, 3000L);
 
 				double fitness = fitnessFunction.apply(bestIndividual);
 				double tiempo = ga.getTimeInMilliseconds();
@@ -202,9 +202,9 @@ public class asignacion_de_turnos_DEMO {
 			}
 
 			System.out.println("-----ESTADISTICAS-----");
-			System.out.println("\n Fitness media: " + fitnessTotal / 50 + "Fitness máxima: " + fitnessMaxima
+			System.out.println("\n Fitness media: " + fitnessTotal / 50 + "\nFitness maxima: " + fitnessMaxima
 					+ "\n Fitness minima: " + fitnessMinima);
-			System.out.println("\nTiempo medio: " + tiempoTotal / 50 + "\n Tiempo máximo: " + tiempoMaximo
+			System.out.println("\nTiempo medio: " + tiempoTotal / 50 + "\n Tiempo maximo: " + tiempoMaximo
 					+ "\n Tiempo minimo: " + tiempoMinimo);
 			System.out.println(
 					"\nIteraciones media: " + iteracionesTotal / 50 + "\n It max: " + itMax + "\n It min: " + itMin);

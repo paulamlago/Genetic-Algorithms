@@ -67,6 +67,7 @@ public class asignacion_de_turnosGenAlgoUtil{
 		Collection<Profesor> fab = new ArrayList<Profesor>();
 
 		for (int i = 0; i < p.size(); i++) {
+			p.get(i).setLocatedAt(i + 1);
 			fab.add(p.get(i));
 		}
 
