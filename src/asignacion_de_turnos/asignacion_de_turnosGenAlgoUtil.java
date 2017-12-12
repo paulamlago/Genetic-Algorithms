@@ -67,6 +67,7 @@ public class asignacion_de_turnosGenAlgoUtil{
 		Collection<Profesor> fab = new ArrayList<Profesor>();
 
 		for (int i = 0; i < p.size(); i++) {
+			p.get(i).setLocatedAt(i + 1);
 			fab.add(p.get(i));
 		}
 
@@ -95,24 +96,24 @@ public class asignacion_de_turnosGenAlgoUtil{
 			
 			double fitness = 0.0;
 			Horario board = getBoardForIndividual(individual);
-			//numero de profesores asignados en horarios de su preferencia y que no estï¿½n en sus restricciones
+			//numero de profesores asignados en horarios de su preferencia y que no estÃ¯Â¿Â½n en sus restricciones
 			double turnosPorProfe = Math.ceil((double) goal / numeroDeProfesores);
 			
 			List<XYLocation> posiciones = board.getProfesorPositions();
-			HashMap<String, List<Integer>> profes = new HashMap<String, List<Integer>>(); //para ver cada profe en qué posiciones está asignado
+			HashMap<String, List<Integer>> profes = new HashMap<String, List<Integer>>(); //para ver cada profe en quÃ© posiciones estÃ¡ asignado
 			
-			//primero compruebo lo mas grave, que tras las mutaciones dos profesores est�n en la misma posicion
+			//primero compruebo lo mas grave, que tras las mutaciones dos profesores estén en la misma posicion
 			//es decir, no se cumple el objetivo, en ese caso es la peor fitness
 			if (board.getTurnosYaAsignados() != goal) fitness = 0;
 			else{
-				//si no es asi, vemos que cada profesor est� en una preferente
+				//si no es asi, vemos que cada profesor esté en una preferente
 				for (int i = 0;  i < posiciones.size(); i++){ //recorre cada posicion en la que hay profesores
 			
 					List<Integer> pref = new ArrayList<>();
 					List<Integer> rest = new ArrayList<>();
 					
 					XYLocation pos = posiciones.get(i);
-					Profesor p = board.getProfesorAt(pos); //coge al profesor de esa posición
+					Profesor p = board.getProfesorAt(pos); //coge al profesor de esa posiciÃ³n
 					pref = p.getPreferencias();
 					rest = p.getRestricciones();
 					
@@ -137,7 +138,7 @@ public class asignacion_de_turnosGenAlgoUtil{
 				}
 			
 				//tenemos en el hash map los profesores con una lista de las posiciones en las que estan
-				//si el tamaño de esa lista supera turnosPorProfe restamos fitness
+				//si el tamaÃ±o de esa lista supera turnosPorProfe restamos fitness
 				//la restamos en proporcion
 				for (HashMap.Entry<String, List<Integer>> entry : profes.entrySet()) {
 					if (entry.getValue().size() > turnosPorProfe){
@@ -159,11 +160,11 @@ public class asignacion_de_turnosGenAlgoUtil{
 		public boolean isGoalState(Object state) {
 			Individual<Profesor> e = (Individual<Profesor>) state;
 			Horario board = getBoardForIndividual(e);
-			HashMap<String, List<Integer>> profes = new HashMap<String, List<Integer>>(); //para ver cada profe en qu� posiciones est� asignado
+			HashMap<String, List<Integer>> profes = new HashMap<String, List<Integer>>(); //para ver cada profe en qué posiciones está asignado
 			
 			
 			if (goal == board.getTurnosYaAsignados()){
-				//recorremos el tablero para comprobar que todos profesores est�n en posiciones prioritarias
+				//recorremos el tablero para comprobar que todos profesores están en posiciones prioritarias
 				Boolean okay = true;
 				List<Profesor> p = e.getRepresentation();
 				
@@ -183,7 +184,7 @@ public class asignacion_de_turnosGenAlgoUtil{
 					i++;
 				}
 				
-				//recorremos el hash para ver si cada profe est� el n�mero de veces que le corresponde
+				//recorremos el hash para ver si cada profe está el número de veces que le corresponde
 				
 				for (HashMap.Entry<String, List<Integer>> entry : profes.entrySet()) {
 					if (entry.getValue().size() > Math.ceil((double) goal / numeroDeProfesores)){
