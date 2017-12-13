@@ -113,7 +113,10 @@ public class asignacion_de_turnos_DEMO {
 				+ "1.Print a 100 trials of best individual search with statistics.\n"
 				+ "2.Print 3 trials of genetic algorithm search with different crossover probabilities\n"
 				+ "3.Print a trial of genetic algorithm search when obtaining 2 children from the crossover\n"
-				+ "4.Print a trial of genetic algorithm search with destructive vs.non destructive strategy\n ");
+				+ "4.Print a trial of genetic algorithm search with destructive vs.non destructive strategy\n "
+				+ "5.Print a trial of genetic algorithm search using a two point crossover\n"
+				+ "6.Test seleccion por torneo\n"
+				+ "Enter 0 to exit\n ");
 		int num = scanner.nextInt();
 		scanner.nextLine();
 
@@ -126,14 +129,23 @@ public class asignacion_de_turnos_DEMO {
 			String in = scanner.nextLine();
 			String[] inputs = in.split(" ");
 			
-			for (int i = 0; i < 3; i++)
-				asignacion_de_turnos_DEMO_GeneticAlgorithmSearchDoubleSample(Double.parseDouble(inputs[i]), false, false);
+			for (int i = 0; i < 3; i++){
+				System.out.println("\n Pueba con probabilidad = " + inputs[i]);
+				asignacion_de_turnos_DEMO_GeneticAlgorithmSearchDoubleSample(Double.parseDouble(inputs[i]), false, 
+						false, false, false);
+			}
 			break;
 		case 3:
-			asignacion_de_turnos_DEMO_GeneticAlgorithmSearchDoubleSample(0.9, true, false);
+			asignacion_de_turnos_DEMO_GeneticAlgorithmSearchDoubleSample(0.9, true, false, false, false);
 			break;
 		case 4:
-			asignacion_de_turnos_DEMO_GeneticAlgorithmSearchDoubleSample(0.9, true, true);
+			asignacion_de_turnos_DEMO_GeneticAlgorithmSearchDoubleSample(0.9, true, true, false, false);
+			break;
+		case 5:
+			asignacion_de_turnos_DEMO_GeneticAlgorithmSearchDoubleSample(0.9, true, true, true, false);
+			break;
+		case 6:
+			asignacion_de_turnos_DEMO_GeneticAlgorithmSearchDoubleSample(0.9, true, true, true, true);
 			break;
 		default:
 			exit = true;
@@ -169,7 +181,7 @@ public class asignacion_de_turnos_DEMO {
 				Individual<Profesor> bestIndividual;
 
 				//run for 5 seconds
-				bestIndividual = ga.geneticAlgorithm(population, fitnessFunction, goalTest, 3000L);
+				bestIndividual = ga.geneticAlgorithm(population, fitnessFunction, goalTest, 5000L);
 
 				double fitness = fitnessFunction.apply(bestIndividual);
 				double tiempo = ga.getTimeInMilliseconds();
@@ -227,51 +239,86 @@ public class asignacion_de_turnos_DEMO {
 		}
 	}
 
-	public static void asignacion_de_turnos_DEMO_GeneticAlgorithmSearchDoubleSample(double crossoverProbability, boolean children, boolean destructive) {
+	public static void asignacion_de_turnos_DEMO_GeneticAlgorithmSearchDoubleSample(double crossoverProbability,
+			boolean children, boolean destructive, boolean twoCrossPoint, boolean torneo) {
 		System.out.println("\n asignacion_de_turnos_DEMO GeneticAlgorithm  -->");
 
 		try {
-			FitnessFunction<Profesor> fitnessFunction = asignacion_de_turnosGenAlgoUtil.getFitnessFunction();
-			GoalTest goalTest = asignacion_de_turnosGenAlgoUtil.getGoalTest(turnosNecesarios, profesores.size());
-			// Generate an initial population
-			Set<Individual<Profesor>> population = new HashSet<Individual<Profesor>>();
+			double fitnessTotal = 0, fitnessMinima = 0, fitnessMaxima = 0, tiempoMinimo = 0, tiempoMaximo = 0,
+					tiempoTotal = 0;
+			int iteracionesTotal = 0, itMax = 0, itMin = 0;
 
-			for (int i = 0; i < 100; i++) {
-				Individual<Profesor> p = asignacion_de_turnosGenAlgoUtil.generateRandomIndividual(boardSize,
-						profesores);
+			for (int j = 0; j < 50; j++) { // para las estadísticas de la memoria
+				FitnessFunction<Profesor> fitnessFunction = asignacion_de_turnosGenAlgoUtil.getFitnessFunction();
+				GoalTest goalTest = asignacion_de_turnosGenAlgoUtil.getGoalTest(turnosNecesarios, profesores.size());
+				// Generate an initial population
+				Set<Individual<Profesor>> population = new HashSet<Individual<Profesor>>();
 
-				population.add(p);
+				for (int i = 0; i < 100; i++) {
+					Individual<Profesor> p = asignacion_de_turnosGenAlgoUtil.generateRandomIndividual(boardSize,
+							profesores);
+
+					population.add(p);
+				}
+
+				MyGeneticAlgorithm<Profesor> ga = new MyGeneticAlgorithm<Profesor>(turnosNecesarios,
+						asignacion_de_turnosGenAlgoUtil.getFiniteAlphabetForBoardOfSize(profesores), 0.15,
+						crossoverProbability, children, destructive, twoCrossPoint, torneo);
+
+
+				// Run till goal is achieved
+				 Individual<Profesor> bestIndividual = ga.geneticAlgorithm(population, fitnessFunction, goalTest, 3000L);
+
+				double fitness = fitnessFunction.apply(bestIndividual);
+				double tiempo = ga.getTimeInMilliseconds();
+				int iteraciones = ga.getIterations();
+				 System.out.println("");
+				 System.out.println("Goal Test (5 seconds) Best Individual=\n"
+				 + asignacion_de_turnosGenAlgoUtil.getBoardForIndividual(bestIndividual));
+				 System.out.println("Board Size = " + boardSize);
+				 System.out.println("# Board Layouts = " + (new
+				 BigDecimal(boardSize).pow(boardSize)));
+				 System.out.println("Fitness = " + fitnessFunction.apply(bestIndividual));
+				 System.out.println("Is Goal = " + goalTest.isGoalState(bestIndividual));
+				 System.out.println("Population Size = " + ga.getPopulationSize());
+				 System.out.println("Itertions = " + ga.getIterations());
+				 System.out.println("Took = " + ga.getTimeInMilliseconds() + "ms.");
+
+				fitnessTotal += fitness;
+				if (j == 0) {
+					fitnessMinima = fitness;
+					tiempoMinimo = tiempo;
+					itMin = iteraciones;
+				}
+
+				if (fitness > fitnessMaxima) {
+					fitnessMaxima = fitness;
+				} else if (fitness < fitnessMinima) {
+					fitnessMinima = fitness;
+				}
+
+				tiempoTotal += tiempo;
+				if (tiempo < tiempoMinimo) {
+					tiempoMinimo = tiempo;
+				} else if (tiempo > tiempoMaximo) {
+					tiempoMaximo = tiempo;
+				}
+
+				iteracionesTotal += iteraciones;
+				if (iteraciones > itMax) {
+					itMax = iteraciones;
+				} else if (iteraciones < itMin) {
+					itMin = iteraciones;
+				}
 			}
 
-			MyGeneticAlgorithm<Profesor> ga = new MyGeneticAlgorithm<Profesor>(turnosNecesarios,
-					asignacion_de_turnosGenAlgoUtil.getFiniteAlphabetForBoardOfSize(profesores), 0.15, crossoverProbability, children, destructive);
-
-			// Run for a set amount of time
-			Individual<Profesor> bestIndividual = ga.geneticAlgorithm(population, fitnessFunction, goalTest, 1000L);
-
-			System.out.println("Max Time (1 second) Best Individual=\n"
-					+ asignacion_de_turnosGenAlgoUtil.getBoardForIndividual(bestIndividual));
-			System.out.println("Board Size      = " + boardSize);
-			System.out.println("# Board Layouts = " + (new BigDecimal(boardSize).pow(boardSize)));
-			System.out.println("Fitness         = " + fitnessFunction.apply(bestIndividual));
-			System.out.println("Is Goal         = " + goalTest.isGoalState(bestIndividual));
-			System.out.println("Population Size = " + ga.getPopulationSize());
-			System.out.println("Itertions       = " + ga.getIterations());
-			System.out.println("Took            = " + ga.getTimeInMilliseconds() + "ms.");
-
-			// Run till goal is achieved
-			bestIndividual = ga.geneticAlgorithm(population, fitnessFunction, goalTest, 5000L);
-
-			System.out.println("");
-			System.out.println("Goal Test (5 seconds) Best Individual=\n"
-					+ asignacion_de_turnosGenAlgoUtil.getBoardForIndividual(bestIndividual));
-			System.out.println("Board Size      = " + boardSize);
-			System.out.println("# Board Layouts = " + (new BigDecimal(boardSize).pow(boardSize)));
-			System.out.println("Fitness         = " + fitnessFunction.apply(bestIndividual));
-			System.out.println("Is Goal         = " + goalTest.isGoalState(bestIndividual));
-			System.out.println("Population Size = " + ga.getPopulationSize());
-			System.out.println("Itertions       = " + ga.getIterations());
-			System.out.println("Took            = " + ga.getTimeInMilliseconds() + "ms.");
+			System.out.println("-----ESTADISTICAS-----");
+			System.out.println("\n Fitness media: " + fitnessTotal / 50 + "Fitness máxima: " + fitnessMaxima
+					+ "\n Fitness minima: " + fitnessMinima);
+			System.out.println("\nTiempo medio: " + tiempoTotal / 50 + "\n Tiempo máximo: " + tiempoMaximo
+					+ "\n Tiempo minimo: " + tiempoMinimo);
+			System.out.println(
+					"\nIteraciones media: " + iteracionesTotal / 50 + "\n It max: " + itMax + "\n It min: " + itMin);
 
 		} catch (Exception e) {
 			e.printStackTrace();

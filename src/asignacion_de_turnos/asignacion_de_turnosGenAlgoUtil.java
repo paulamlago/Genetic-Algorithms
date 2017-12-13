@@ -239,5 +239,4 @@ public class asignacion_de_turnosGenAlgoUtil{
 		}
 
 	}
-
 }

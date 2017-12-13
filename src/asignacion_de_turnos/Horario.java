@@ -45,15 +45,6 @@ public class Horario {
 		}
 	}
 
-	/**public void removeProfesorAt(XYLocation loc){
-		if (ProfesorExistsAt(loc)){
-			int i = loc.getXCoOrdinate();
-			int j = loc.getYCoOrdinate();
-			horario[i][j].setLocatedAt(-1);
-			
-			horario[i][j] = new Profesor(""); //dejamos un profesor vac�o
-		}
-	}*/
 	
 	public boolean ProfesorExistsAt(XYLocation l) {
 		return (ProfesorExistsAt(l.getXCoOrdinate(), l.getYCoOrdinate()));

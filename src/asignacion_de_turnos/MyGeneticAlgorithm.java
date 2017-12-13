@@ -14,13 +14,17 @@ public class MyGeneticAlgorithm<A> extends GeneticAlgorithm<A> {
 	protected double crossoverProbability;
 	protected boolean twoChildren;
 	protected boolean destructive;
+	protected boolean twoCrossPoint;
+	protected boolean torneo;
 
 	public MyGeneticAlgorithm(int individualLength, Collection<A> finiteAlphabet, double mutationProbability,
-			double crossoverProbability, boolean children, boolean destructive) {
+			double crossoverProbability, boolean children, boolean destructive, boolean twoCrossPoint, boolean torneo) {
 		super(individualLength, finiteAlphabet, mutationProbability);
 		this.crossoverProbability = crossoverProbability;
 		this.twoChildren = children;
 		this.destructive = destructive;
+		this.twoCrossPoint = twoCrossPoint;
+		this.torneo = torneo;
 	}
 
 	@Override
@@ -63,23 +67,34 @@ public class MyGeneticAlgorithm<A> extends GeneticAlgorithm<A> {
 		// for i = 1 to SIZE(population) do
 
 		for (int i = 0; i < population.size(); i++) {
-			// x <- RANDOM-SELECTION(population, FITNESS-FN)
-			Individual<A> x = randomSelection(population, fitnessFn);
-			// y <- RANDOM-SELECTION(population, FITNESS-FN)
-			Individual<A> y = randomSelection(population, fitnessFn);
+			Individual<A> x;
+			Individual<A> y;
+
+			if (torneo) {
+				x = seleccionPorTorneo(population, fitnessFn);
+				y = seleccionPorTorneo(population, fitnessFn);
+			} else {
+				// x <- RANDOM-SELECTION(population, FITNESS-FN)
+				x = randomSelection(population, fitnessFn);
+				// y <- RANDOM-SELECTION(population, FITNESS-FN)
+				y = randomSelection(population, fitnessFn);
+			}
 			// child <- REPRODUCE(x, y)
 			List<Individual<A>> children = new ArrayList<Individual<A>>(2);
 			if (random.nextDouble() < crossoverProbability) {
 				if (twoChildren) {
-					children = reproduceTwoKiddos(x, y);
+					if (!twoCrossPoint)
+						children = reproduceTwoKiddos(x, y);
+					else
+						children = reproduceTwoKiddos2Puntos(x, y);
 					// if (small random probability) then child <- MUTATE(child)
 					if (random.nextDouble() <= mutationProbability) {
-						mutate(children.get(0));
-						mutate(children.get(1));
+						mutacionIntercambio(children.get(0));
+						mutacionIntercambio(children.get(1));
 					}
 					if (destructive)
 						newPopulation.addAll(children);
-					else { //non-destructing
+					else { // non-destructing
 						if (fitnessFn.apply(children.get(0))
 								+ fitnessFn.apply(children.get(1)) > (fitnessFn.apply(x) + fitnessFn.apply(y))) {
 							newPopulation.addAll(children);
@@ -88,11 +103,9 @@ public class MyGeneticAlgorithm<A> extends GeneticAlgorithm<A> {
 							newPopulation.add(x);
 							newPopulation.add(y);
 						}
-
 					}
-				}
-				else 
-					newPopulation.add(reproduce(x,y));
+				} else
+					newPopulation.add(reproduce(x, y));
 			} else {
 				newPopulation.add(x);
 				newPopulation.add(y);
@@ -167,4 +180,27 @@ public class MyGeneticAlgorithm<A> extends GeneticAlgorithm<A> {
 		return mutatedChild;
 	}
 
+	protected Individual<A> seleccionPorTorneo(List<Individual<A>> population, FitnessFunction<A> fitnessFn) {
+		Individual<A> selectedA = population.get(random.nextInt(population.size()));
+		Individual<A> selectedB = population.get(random.nextInt(population.size()));
+		double fitnessA = fitnessFn.apply(selectedA);
+		double fitnessB = fitnessFn.apply(selectedB);
+		return fitnessA > fitnessB ? selectedA : selectedB;
+	}
+
+	protected Individual<A> mutacionIntercambio(Individual<A> child) {
+		int mutateOffset = randomOffset(individualLength-1);
+		List<A> mutatedRepresentation = new ArrayList<A>(child.getRepresentation());
+
+		mutatedRepresentation.set(mutateOffset+1, child.getRepresentation().get(mutateOffset));
+		mutatedRepresentation.set(mutateOffset, child.getRepresentation().get(mutateOffset+1));
+
+		Individual<A> mutatedChild = new Individual<A>(mutatedRepresentation);
+
+		return mutatedChild;
+	}
+
+	protected int randomOffset(int length) {
+		return random.nextInt(length);
+	}
 }
