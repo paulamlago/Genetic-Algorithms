@@ -48,7 +48,8 @@ public class asignacion_de_turnosGenAlgoUtil{
 					Profesor profe = prof.get(new Random().nextInt(prof.size()));
 					
 					if (!profe.getRestricciones().contains(i)){
-						individualRepresentation.add(new Profesor(profe.nombre, i, profe.getRestricciones(), profe.getPreferencias()));
+						individualRepresentation.add(new Profesor(profe.nombre, i, profe.getRestricciones(), profe.getPreferencias(), 
+								profe.getConsecutivos(), profe.getSeparados()));
 						count++;
 						posYaUsadas.add(i);
 					}
@@ -102,7 +103,7 @@ public class asignacion_de_turnosGenAlgoUtil{
 			List<XYLocation> posiciones = board.getProfesorPositions();
 			HashMap<String, List<Integer>> profes = new HashMap<String, List<Integer>>(); //para ver cada profe en quÃƒÂ© posiciones estÃƒÂ¡ asignado
 			
-			//primero compruebo lo mas grave, que tras las mutaciones dos profesores estÃ©n en la misma posicion
+			//primero compruebo lo mas grave, que tras las mutaciones dos profesores estan en la misma posicion
 			//es decir, no se cumple el objetivo, en ese caso es la peor fitness
 			if (board.getTurnosYaAsignados() != goal) fitness = 0;
 			else{
@@ -113,7 +114,7 @@ public class asignacion_de_turnosGenAlgoUtil{
 					List<Integer> rest = new ArrayList<>();
 					
 					XYLocation pos = posiciones.get(i);
-					Profesor p = board.getProfesorAt(pos); //coge al profesor de esa posiciÃƒÂ³n
+					Profesor p = board.getProfesorAt(pos); //coge al profesor de esa posicion
 					pref = p.getPreferencias();
 					rest = p.getRestricciones();
 					
@@ -121,6 +122,7 @@ public class asignacion_de_turnosGenAlgoUtil{
 					
 					int turno = board.getTurnoAt(pos);
 					if (pref.contains(turno)) fitness += 1.0;
+					//puede darse que esté en una restricción al mutar
 					if (rest.contains(turno)) {
 						fitness = 0;
 						break;
@@ -129,6 +131,11 @@ public class asignacion_de_turnosGenAlgoUtil{
 					//lo meto en el hash map
 					if (!profes.containsKey(p.nombre)){
 						List<Integer> x = new ArrayList<Integer>();
+						if (p.getConsecutivos()){
+							x.add(-1);
+						}else if (p.getSeparados()){
+							x.add(-2);
+						}
 						x.add(p.getLocatedAt());
 						profes.put(p.nombre, x);
 					}
@@ -140,10 +147,43 @@ public class asignacion_de_turnosGenAlgoUtil{
 				//tenemos en el hash map los profesores con una lista de las posiciones en las que estan
 				//si el tamaÃƒÂ±o de esa lista supera turnosPorProfe restamos fitness
 				//la restamos en proporcion
+				
 				for (HashMap.Entry<String, List<Integer>> entry : profes.entrySet()) {
-					if (entry.getValue().size() > turnosPorProfe){
-						fitness -= entry.getValue().size() - turnosPorProfe;
+					List<Integer> p = entry.getValue();
+					//si tiene preferencias especiales (parte opcional)
+					if (p.get(0) < 0 && p.size() > 2){ //y si tiene al menos dos turnos preferentes
+						//recorremos la lista para ver si se cumple
+							
+							Boolean consecutive = true, separados = false;
+							
+							int i = 2;
+							while (i < p.size()){
+								if (p.get(i - 1) + 1 != p.get(i)){ //porque están ordenadas
+									//no son consecutivas
+									consecutive = false;
+									if (p.get(i - 1) + 4 >= p.get(i)){ //cada turno está separadodía
+										separados = true;
+									}
+								}
+								else {
+									separados = false;
+									consecutive = true;
+								}
+								i++;
+							}
+							
+							if (consecutive && p.get(0) == -1) fitness += 1;
+							else if (!consecutive && p.get(0) == -1) fitness -= 1;
+							
+							if (separados && p.get(0) == -2) fitness += 1;
+							else if (!separados && p.get(0) == -2) fitness -= 1;
 					}
+					
+					int size = p.size() - (p.get(0) < 0 ? 1:0);
+					if (size > turnosPorProfe){
+						fitness -= size - turnosPorProfe;
+					}
+					
 				}
 			
 			}

@@ -72,10 +72,12 @@ public class asignacion_de_turnos_DEMO {
 		j = 0;
 		while (j < nombres.length && it.hasNext()) {
 			List<Integer> p = new ArrayList<Integer>();
-
+			Boolean consecutivo = false, separados = false;
+			
 			linea = scanner.nextLine();
 			preferencias = linea.split(":");
-
+			
+			Profesor e = it.next();
 			if (preferencias.length > 1) {
 				preferencias = preferencias[1].split(",");
 
@@ -83,17 +85,28 @@ public class asignacion_de_turnos_DEMO {
 
 				for (int i = 0; i < preferencias.length; i++) {
 
-					if (!preferencias[i].equals(""))
-						p.add(Integer.valueOf(preferencias[i].replace(" ", "")));
+					if (!preferencias[i].equals("")){
+						if (preferencias[i].equals("C")){
+							consecutivo = true;
+						}
+						else if (preferencias[i].equals("S")){
+							separados = true;
+						}
+						else p.add(Integer.valueOf(preferencias[i].replace(" ", "")));
+					}
 				}
 
-				Profesor e = it.next();
 				e.setPreferencias(p);
+				e.setConsecutivos(consecutivo);
+				e.setSeparados(separados);
+				
 			} else
-				it.next();
-
+				
+				e.setConsecutivos(false);
+				e.setSeparados(false);
 			j++;
 		}
+		
 		boolean exit = false; 
 		do {
 		System.out.println("\nPlease, choose an option:\n"

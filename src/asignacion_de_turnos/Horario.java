@@ -39,7 +39,6 @@ public class Horario {
 			int i = loc.getXCoOrdinate();
 			int j = loc.getYCoOrdinate();
 			if(!p.getRestricciones().contains(turnos[i][j])){
-				//p.setLocatedAt(turnos[i][j]);
 				horario[i][j] = p;
 				this.setTurnosYaAsignados(this.getTurnosYaAsignados() + 1);
 			}

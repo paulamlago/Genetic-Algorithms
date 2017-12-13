@@ -9,6 +9,9 @@ public class Profesor implements Comparable<Profesor>{
 	private List<Integer> restricciones;
 	private List<Integer> preferencias;
 	private int locatedAt;
+
+	private Boolean consecutivos;
+	private Boolean separados;
 	
 	public Profesor(String n){
 		this.nombre = n;
@@ -17,11 +20,13 @@ public class Profesor implements Comparable<Profesor>{
 		locatedAt = -1;
 	}
 	
-	public Profesor(String n, int pos, List<Integer> restricciones, List<Integer> preferencias){
+	public Profesor(String n, int pos, List<Integer> restricciones, List<Integer> preferencias, Boolean c, Boolean s){
 		this.nombre = n;
 		this.restricciones = restricciones;
 		this.preferencias = preferencias;
-		locatedAt = pos;
+		this.locatedAt = pos;
+		this.consecutivos = c;
+		this.separados = s;
 	}
 	
 	public void setRestricciones(List<Integer> r){
@@ -73,5 +78,21 @@ public class Profesor implements Comparable<Profesor>{
 			return -1;
 		}
 		return 1;
+	}
+
+	public Boolean getSeparados() {
+		return separados;
+	}
+
+	public void setSeparados(Boolean separados) {
+		this.separados = separados;
+	}
+
+	public Boolean getConsecutivos() {
+		return consecutivos;
+	}
+
+	public void setConsecutivos(Boolean consecutivos) {
+		this.consecutivos = consecutivos;
 	}
 }
